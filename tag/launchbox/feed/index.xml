@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>launchbox &#8211; That Data Science Guy</title>
+	<atom:link href="https://thatdatascienceguy.github.io/data-science-blog/tag/launchbox/feed/" rel="self" type="application/rss+xml" />
+	<link>https://thatdatascienceguy.github.io/data-science-blog/</link>
+	<description></description>
+	<lastBuildDate>Thu, 12 Nov 2020 18:57:37 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=5.8.3</generator>
+	<item>
+		<title>Extracting LaunchBox&#8217;s Video Game Metadata: Getting Data of Video Game Consoles</title>
+		<link>https://thatdatascienceguy.github.io/data-science-blog/2020/11/12/extracting-launchboxs-video-game-metadata-getting-data-of-video-game-consoles/</link>
+					<comments>https://thatdatascienceguy.github.io/data-science-blog/2020/11/12/extracting-launchboxs-video-game-metadata-getting-data-of-video-game-consoles/#respond</comments>
+		
+		<dc:creator><![CDATA[thatdatascienceguy]]></dc:creator>
+		<pubDate>Thu, 12 Nov 2020 18:13:47 +0000</pubDate>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[data science]]></category>
+		<category><![CDATA[launchbox]]></category>
+		<category><![CDATA[launchbox-app]]></category>
+		<category><![CDATA[thatdatascienceguy]]></category>
+		<category><![CDATA[videogameconsoles]]></category>
+		<category><![CDATA[videogames]]></category>
+		<guid isPermaLink="false">http://34.193.228.138/?p=424</guid>
+
+					<description><![CDATA[Hello world!!! Where are all my gamers new and old at?! Anyone hyped up for the PlayStation 5?? Love video&#8230;]]></description>
+										<content:encoded><![CDATA[
+<p>Hello world!!!</p>
+
+
+
+<p>Where are all my gamers new and old at?!</p>
+
+
+
+<p>Anyone hyped up for the PlayStation 5??</p>
+
+
+
+<p>Love video games and coding?</p>
+
+
+
+<p>Well, if you said yes to any one of those, I am here to let you know that I was able to get metadata from LaunchBox (<a href="https://www.launchbox-app.com/" target="_blank" rel="noreferrer noopener">https://www.launchbox-app.com/</a>) of their video games database.</p>
+
+
+
+<p>I was always interested in having my own internal database of video games for my own analysis. I always wanted to know how many video games existed, how many platforms are out there and so on.</p>
+
+
+
+<p>This blog post is about me extracting the list of video game platforms from LaunchBox&#8217;s XML metadata. </p>
+
+
+
+<h2>Looking at the Data</h2>
+
+
+
+<p></p>
+
+
+
+<p>The zip file that was given to me by Launchbox has several XML files. One of them is a file containing all the platforms that Launchbox has in their records.</p>
+
+
+
+<p>Here is some of that data as an example:</p>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="1024" height="558" src="http://34.193.228.138/wp-content/uploads/2020/11/Screenshot-from-2020-11-11-16-24-03-1024x558.png" alt="" class="wp-image-433" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-11-16-24-03-1024x558.png 1024w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-11-16-24-03-300x164.png 300w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-11-16-24-03-768x419.png 768w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-11-16-24-03-1536x838.png 1536w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-11-16-24-03-1600x872.png 1600w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-11-16-24-03-1320x720.png 1320w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-11-16-24-03.png 1823w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+
+
+
+<p>The platforms that are listed on this file also have other tags in them that define some specs on the platform such as name, CPU, description, release date and so on.</p>
+
+
+
+<p>My goal was to take this data and convert it to a DataFrame (a table of rows and columns) where each row represents a console and the columns are the attributes of that console. Putting it in this format helps for better readability and analysis.</p>
+
+
+
+<p>The steps were as follows:</p>
+
+
+
+<ul><li>Read the XML file of video game platforms</li><li>For each platform, extract certain attributes and store them in a DataFrame.</li><li>Take the DataFrame and write it to a CSV file.</li></ul>
+
+
+
+<h2>Getting the Data</h2>
+
+
+
+<p></p>
+
+
+
+<p>I used python to simply read in the XML file as follows:</p>
+
+
+
+<pre class="wp-block-code"><code>import xml.etree.ElementTree as ET
+import pandas as pd
+import re
+
+# read in the data
+platforms_xml = ET.parse('Platforms.xml')
+root_xml = platforms_xml.getroot()</code></pre>
+
+
+
+<p>Once we have the root or starting point of the XML tree, next step is to for each platform tag, read in each of the attributes:</p>
+
+
+
+<ul><li>Name</li><li>Emulated</li><li>Release Date</li><li>Developer</li><li>Manufacturer</li><li>CPU</li><li>Memory</li><li>Graphics</li><li>Sound</li><li>Display</li><li>Media</li><li>Maximum Controllers</li><li>Notes</li><li>Category</li></ul>
+
+
+
+<pre class="wp-block-code"><code># Create Empty list to store attributes
+platform_attrs = &#91;"Name", "Emulated", "ReleaseDate", "Developer",
+	 "Manufacturer", "Cpu", "Memory", "Graphics", "Sound",
+	 "Display", "Media", "MaxControllers", "Notes", "Category"]
+
+# list to store all the data to be converted to CSV
+rows = &#91;]
+
+for platform in root_xml:
+	data = &#91;]
+	# Check if any of them are null and if so, set the value to 'None'
+	for field in platform_attrs:
+		if platform is not None and platform.find(field) is not None:
+			data.append(platform.find(field).text) # add the data
+		else: # it is a empty value set to None
+			data.append(None)
+	# append the data/observation to the rows list
+	rows.append({platform_attrs&#91;i]: data&#91;i]
+			  for i in range(0,len(platform_attrs))})</code></pre>
+
+
+
+<h2>Taking the Data Extracted from the XML File and Putting it in a DataFrame</h2>
+
+
+
+<p></p>
+
+
+
+<p>The code below shows how to convert the extracted data to a data frame</p>
+
+
+
+<pre class="wp-block-code"><code># Crate a dataframe out of the extracted data from the xml file
+platforms = pd.DataFrame(rows, columns = platform_attrs)</code></pre>
+
+
+
+<p>Only 2 things I wanted to clean in the dataset was to remove the time in the &#8220;ReleaseDate&#8221; field and just keep the date. I didn&#8217;t feel it was necessary to know what actual time the console was released.</p>
+
+
+
+<pre class="wp-block-code"><code># looking around the csv file, there are time/timezones in the date as well.
+# let's remove the time and keep the date
+dates = &#91;re.sub("T.*", "", date)
+		 if date is not None else None
+		 for date in platforms&#91;"ReleaseDate"]]
+
+platforms&#91;"ReleaseDate"] = dates</code></pre>
+
+
+
+<h2>Querying the Data</h2>
+
+
+
+<p></p>
+
+
+
+<p>After all that work, I was curious on a few questions like</p>
+
+
+
+<ol><li>How many Nintendo consoles have been made and when?</li><li>What are the specs of each Sony console?</li><li>Which consoles were using floppy disks and when did they start fading out? </li></ol>
+
+
+
+<p>First question can be answered by searching for &#8220;Nintendo&#8221; in the nName column and outputting the name and release date and sort it by &#8220;ReleaseDate&#8221;.</p>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="767" height="573" src="http://34.193.228.138/wp-content/uploads/2020/11/Screenshot-from-2020-11-12-11-39-56.png" alt="" class="wp-image-484" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-12-11-39-56.png 767w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-12-11-39-56-300x224.png 300w" sizes="(max-width: 767px) 100vw, 767px" /></figure>
+
+
+
+<p>The second question can be answered similar to the previous question except, search for &#8220;Sony&#8221; instead. Then list the name, CPU, memory, graphics and, display.</p>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="993" height="437" src="http://34.193.228.138/wp-content/uploads/2020/11/Screenshot-from-2020-11-12-11-49-14.png" alt="" class="wp-image-487" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-12-11-49-14.png 993w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-12-11-49-14-300x132.png 300w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-12-11-49-14-768x338.png 768w" sizes="(max-width: 993px) 100vw, 993px" /></figure>
+
+
+
+<p>The answer to the last one is just search for &#8220;floppy&#8221; in the &#8220;Media&#8221; column and display the Name, release date and, media used.</p>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="813" height="866" src="http://34.193.228.138/wp-content/uploads/2020/11/Screenshot-from-2020-11-12-11-51-50.png" alt="" class="wp-image-488" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-12-11-51-50.png 813w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-12-11-51-50-282x300.png 282w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-12-11-51-50-768x818.png 768w" sizes="(max-width: 813px) 100vw, 813px" /></figure>
+
+
+
+<p>Anyone got a case of nostalgia looking at the floppy disk results? <img src="https://s.w.org/images/core/emoji/13.1.0/72x72/1f642.png" alt="🙂" class="wp-smiley" style="height: 1em; max-height: 1em;" /></p>
+
+
+
+<h2>Summary</h2>
+
+
+
+<p></p>
+
+
+
+<p>I have shown you how I took XML data courtesy of LaunchBox and using programming and logic, convert it to a DataFrame and reveal insights about the data. I love to let the data speak for itself. <img src="https://s.w.org/images/core/emoji/13.1.0/72x72/1f642.png" alt="🙂" class="wp-smiley" style="height: 1em; max-height: 1em;" /></p>
+
+
+
+<p>What over queries can you come up with this data? I would love to hear your feedback.</p>
+
+
+
+<p>Hope you enjoyed reading this blog post and links to the data and code can be found here:</p>
+
+
+
+<p><a href="https://github.com/thatdatascienceguy/thatdatascienceguyblog/tree/master/VideoGameData">https://github.com/thatdatascienceguy/thatdatascienceguyblog/tree/master/VideoGameData</a></p>
+
+
+
+<p>On that link, you can also download the .zip file of the Metadata that I used for this blog.</p>
+
+
+
+<p>I also made a .csv (Comma Separated Value) file which you can open with any text editor or spreadsheet software of your choice.</p>
+
+
+
+<h3><strong>***Coming Soon: blog post of video games of every console from LaunchBox!!!***</strong></h3>
+]]></content:encoded>
+					
+					<wfw:commentRss>https://thatdatascienceguy.github.io/data-science-blog/2020/11/12/extracting-launchboxs-video-game-metadata-getting-data-of-video-game-consoles/feed/</wfw:commentRss>
+			<slash:comments>0</slash:comments>
+		
+		
+			</item>
+	</channel>
+</rss>

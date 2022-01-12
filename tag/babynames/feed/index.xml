@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>babynames &#8211; That Data Science Guy</title>
+	<atom:link href="https://thatdatascienceguy.github.io/data-science-blog/tag/babynames/feed/" rel="self" type="application/rss+xml" />
+	<link>https://thatdatascienceguy.github.io/data-science-blog/</link>
+	<description></description>
+	<lastBuildDate>Fri, 07 Aug 2020 01:05:05 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=5.8.3</generator>
+	<item>
+		<title>Web App for Viewing Baby Names in the U.S Over Time</title>
+		<link>https://thatdatascienceguy.github.io/data-science-blog/2020/08/07/web-app-for-viewing-baby-names-in-the-u-s-over-time/</link>
+					<comments>https://thatdatascienceguy.github.io/data-science-blog/2020/08/07/web-app-for-viewing-baby-names-in-the-u-s-over-time/#respond</comments>
+		
+		<dc:creator><![CDATA[thatdatascienceguy]]></dc:creator>
+		<pubDate>Fri, 07 Aug 2020 01:05:05 +0000</pubDate>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[baby names]]></category>
+		<category><![CDATA[babynames]]></category>
+		<category><![CDATA[data science]]></category>
+		<category><![CDATA[R]]></category>
+		<category><![CDATA[shiny]]></category>
+		<category><![CDATA[shinyapp]]></category>
+		<category><![CDATA[thatdatascienceguy]]></category>
+		<category><![CDATA[web app]]></category>
+		<guid isPermaLink="false">http://34.193.228.138/?p=366</guid>
+
+					<description><![CDATA[Hello World! Ever dreamed of what to name your future children or curious how popular a particular name is? Love&#8230;]]></description>
+										<content:encoded><![CDATA[
+<p>Hello World!</p>
+
+
+
+<p>Ever dreamed of what to name your future children or curious how popular a particular name is? Love interactive web apps?</p>
+
+
+
+<p><strong>Well say no more!</strong></p>
+
+
+
+<p>That Data Science Guy here and this blog post will be based on a web app I made using R Shiny. The web app allows you to type in a name and gender and see how many babies were born from 1880-2018 via bar plot. </p>
+
+
+
+<p>When using the app, always type the name of the person with the first letter capitalized. Otherwise, you might get a empty result.</p>
+
+
+
+<p>With that said, check it out! Type in some names, have fun and you just might find some interesting results and trends! <img src="https://s.w.org/images/core/emoji/13.1.0/72x72/1f642.png" alt="🙂" class="wp-smiley" style="height: 1em; max-height: 1em;" /></p>
+
+
+
+<figure><iframe loading="lazy" width="110%" height="700px" src="https://thatdatascienceguy.shinyapps.io/BabyNamesApp/" allowfullscreen="allowfullscreen"></iframe></figure>
+
+
+
+<p>The data comes from &#8216;babynames&#8217; package in the programming language R. This dataset has a list of baby names of people born in the United States from 1880 to 2018 and comes from the United States SSA (Social Security Administration).</p>
+
+
+
+<p><strong>*** Please note for safety reasons, names that were used less than 5 times are omitted.***</strong></p>
+
+
+
+<p>Hope you enjoyed my web app and hope you learned something new!!</p>
+
+
+
+<p>Github link to source code: <a href="https://github.com/thatdatascienceguy/thatdatascienceguyblog/tree/master/BabyNameApp">https://github.com/thatdatascienceguy/thatdatascienceguyblog/tree/master/BabyNameApp</a></p>
+
+
+
+<p>Link directly to the web app <a href="https://thatdatascienceguy.shinyapps.io/BabyNamesApp/?_ga=2.267556750.1211023990.1596757838-1890682427.1596757838" target="_blank" rel="noreferrer noopener">here</a></p>
+]]></content:encoded>
+					
+					<wfw:commentRss>https://thatdatascienceguy.github.io/data-science-blog/2020/08/07/web-app-for-viewing-baby-names-in-the-u-s-over-time/feed/</wfw:commentRss>
+			<slash:comments>0</slash:comments>
+		
+		
+			</item>
+	</channel>
+</rss>

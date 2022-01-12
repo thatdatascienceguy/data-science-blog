@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+
+	<meta charset="UTF-8">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+
+	<link rel="pingback" href="https://thatdatascienceguy.github.io/data-science-blog/xmlrpc.php">
+
+	<title>August 2020 &#8211; That Data Science Guy</title>
+<meta name="robots" content="max-image-preview:large">
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$','$'],['\\(','\\)']], 
+    processEscapes: true
+  },
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore|editor-rich-text'
+  }
+};
+
+</script>
+<link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="//fonts.googleapis.com">
+<link rel="dns-prefetch" href="//s.w.org">
+<link rel="alternate" type="application/rss+xml" title="That Data Science Guy &raquo; Feed" href="https://thatdatascienceguy.github.io/data-science-blog/feed/">
+<link rel="alternate" type="application/rss+xml" title="That Data Science Guy &raquo; Comments Feed" href="https://thatdatascienceguy.github.io/data-science-blog/comments/feed/">
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/thatdatascienceguy.github.io\/data-science-blog\/wp-includes\/js\/wp-emoji-release.min.js?ver=5.8.3"}};
+			!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){var a=String.fromCharCode;p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,e),0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,t),0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(!p||!p.fillText)return!1;switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])?!1:!s([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!s([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]);case"emoji":return!s([10084,65039,8205,55357,56613],[10084,65039,8203,55357,56613])}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(n=t.source||{}).concatemoji?c(n.concatemoji):n.wpemoji&&n.twemoji&&(c(n.twemoji),c(n.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}</style>
+	<link rel="stylesheet" id="wp-block-library-css" href="https://thatdatascienceguy.github.io/data-science-blog/wp-includes/css/dist/block-library/style.min.css?ver=5.8.3" type="text/css" media="all">
+<style id="wp-block-library-theme-inline-css" type="text/css">#start-resizable-editor-section{display:none}.wp-block-audio figcaption{color:#555;font-size:13px;text-align:center}.is-dark-theme .wp-block-audio figcaption{color:hsla(0,0%,100%,.65)}.wp-block-code{font-family:Menlo,Consolas,monaco,monospace;color:#1e1e1e;padding:.8em 1em;border:1px solid #ddd;border-radius:4px}.wp-block-embed figcaption{color:#555;font-size:13px;text-align:center}.is-dark-theme .wp-block-embed figcaption{color:hsla(0,0%,100%,.65)}.blocks-gallery-caption{color:#555;font-size:13px;text-align:center}.is-dark-theme .blocks-gallery-caption{color:hsla(0,0%,100%,.65)}.wp-block-image figcaption{color:#555;font-size:13px;text-align:center}.is-dark-theme .wp-block-image figcaption{color:hsla(0,0%,100%,.65)}.wp-block-pullquote{border-top:4px solid;border-bottom:4px solid;margin-bottom:1.75em;color:currentColor}.wp-block-pullquote__citation,.wp-block-pullquote cite,.wp-block-pullquote footer{color:currentColor;text-transform:uppercase;font-size:.8125em;font-style:normal}.wp-block-quote{border-left:.25em solid;margin:0 0 1.75em;padding-left:1em}.wp-block-quote cite,.wp-block-quote footer{color:currentColor;font-size:.8125em;position:relative;font-style:normal}.wp-block-quote.has-text-align-right{border-left:none;border-right:.25em solid;padding-left:0;padding-right:1em}.wp-block-quote.has-text-align-center{border:none;padding-left:0}.wp-block-quote.is-large,.wp-block-quote.is-style-large{border:none}.wp-block-search .wp-block-search__label{font-weight:700}.wp-block-group.has-background{padding:1.25em 2.375em;margin-top:0;margin-bottom:0}.wp-block-separator{border:none;border-bottom:2px solid;margin-left:auto;margin-right:auto;opacity:.4}.wp-block-separator:not(.is-style-wide):not(.is-style-dots){width:100px}.wp-block-separator.has-background:not(.is-style-dots){border-bottom:none;height:1px}.wp-block-separator.has-background:not(.is-style-wide):not(.is-style-dots){height:2px}.wp-block-table thead{border-bottom:3px solid}.wp-block-table tfoot{border-top:3px solid}.wp-block-table td,.wp-block-table th{padding:.5em;border:1px solid;word-break:normal}.wp-block-table figcaption{color:#555;font-size:13px;text-align:center}.is-dark-theme .wp-block-table figcaption{color:hsla(0,0%,100%,.65)}.wp-block-video figcaption{color:#555;font-size:13px;text-align:center}.is-dark-theme .wp-block-video figcaption{color:hsla(0,0%,100%,.65)}.wp-block-template-part.has-background{padding:1.25em 2.375em;margin-top:0;margin-bottom:0}#end-resizable-editor-section{display:none}</style>
+<link rel="stylesheet" id="escapade-css" href="https://thatdatascienceguy.github.io/data-science-blog/wp-content/themes/escapade/style.css?ver=1.1.3" type="text/css" media="all">
+<style id="escapade-inline-css" type="text/css">.site-title a,.site-title a:visited{color:#757575;}.site-title a:hover,.site-title a:visited:hover{color:rgba(117, 117, 117, 0.8);}
+.hero,.hero .widget h1,.hero .widget h2,.hero .widget h3,.hero .widget h4,.hero .widget h5,.hero .widget h6,.hero .widget p,.hero .widget blockquote,.hero .widget cite,.hero .widget table,.hero .widget ul,.hero .widget ol,.hero .widget li,.hero .widget dd,.hero .widget dt,.hero .widget address,.hero .widget code,.hero .widget pre,.hero .widget .widget-title,.hero .page-header h1{color:#ffffff;}
+.main-navigation ul li a,.main-navigation ul li a:visited,.main-navigation ul li a:hover,.main-navigation ul li a:focus,.main-navigation ul li a:visited:hover{color:#757575;}.main-navigation .sub-menu .menu-item-has-children > a::after{border-right-color:#757575;border-left-color:#757575;}.menu-toggle div{background-color:#757575;}header .social-menu a,header .social-menu a:visited{color:#757575;}.main-navigation ul li a:hover,.main-navigation ul li a:focus{color:rgba(117, 117, 117, 0.8);}header .social-menu a:hover,header .social-menu a:visited:hover{color:rgba(117, 117, 117, 0.8);}
+h1,h2,h3,h4,h5,h6,label,legend,table th,dl dt,.entry-title,.entry-title a,.entry-title a:visited,.widget-title{color:#353535;}.entry-title a:hover,.entry-title a:visited:hover,.entry-title a:focus,.entry-title a:visited:focus,.entry-title a:active,.entry-title a:visited:active{color:rgba(53, 53, 53, 0.8);}
+body,input,select,textarea,input[type="text"]:focus,input[type="email"]:focus,input[type="url"]:focus,input[type="password"]:focus,input[type="search"]:focus,input[type="number"]:focus,input[type="tel"]:focus,input[type="range"]:focus,input[type="date"]:focus,input[type="month"]:focus,input[type="week"]:focus,input[type="time"]:focus,input[type="datetime"]:focus,input[type="datetime-local"]:focus,input[type="color"]:focus,textarea:focus,.navigation.pagination .paging-nav-text{color:#252525;}hr{background-color:rgba(37, 37, 37, 0.1);border-color:rgba(37, 37, 37, 0.1);}input[type="text"],input[type="email"],input[type="url"],input[type="password"],input[type="search"],input[type="number"],input[type="tel"],input[type="range"],input[type="date"],input[type="month"],input[type="week"],input[type="time"],input[type="datetime"],input[type="datetime-local"],input[type="color"],textarea,.select2-container .select2-choice{color:rgba(37, 37, 37, 0.5);border-color:rgba(37, 37, 37, 0.1);}select,fieldset,blockquote,pre,code,abbr,acronym,.hentry table th,.hentry table td{border-color:rgba(37, 37, 37, 0.1);}.hentry table tr:hover td{background-color:rgba(37, 37, 37, 0.05);}
+blockquote,.entry-meta,.entry-footer,.comment-meta .says,.logged-in-as,.wp-block-coblocks-author__heading{color:#757575;}
+.site-footer .widget-title,.site-footer h1,.site-footer h2,.site-footer h3,.site-footer h4,.site-footer h5,.site-footer h6{color:#757575;}
+.site-footer .widget,.site-footer .widget form label{color:#757575;}
+.footer-menu ul li a,.footer-menu ul li a:visited{color:#757575;}.site-info-wrapper .social-menu a{background-color:#757575;}.footer-menu ul li a:hover,.footer-menu ul li a:visited:hover{color:rgba(117, 117, 117, 0.8);}
+.site-info-wrapper .site-info-text{color:#757575;}
+a,a:visited,.entry-title a:hover,.entry-title a:visited:hover{color:#55b74e;}.navigation.pagination .nav-links .page-numbers.current,.social-menu a:hover{background-color:#55b74e;}.main-navigation ul li:hover,.main-navigation li.current-menu-item,.main-navigation ul li.current-menu-item > a:hover,.main-navigation ul li.current-menu-item > a:visited:hover,.woocommerce-cart-menu-item .woocommerce.widget_shopping_cart p.buttons a:hover{background-color:#55b74e;}a:hover,a:visited:hover,a:focus,a:visited:focus,a:active,a:visited:active{color:rgba(85, 183, 78, 0.8);}.comment-list li.bypostauthor{border-color:rgba(85, 183, 78, 0.2);}
+button,a.button,a.button:visited,input[type="button"],input[type="reset"],input[type="submit"],.wp-block-button__link,.site-info-wrapper .social-menu a:hover{background-color:#55b74e;border-color:#55b74e;}button:hover,button:active,button:focus,a.button:hover,a.button:active,a.button:focus,a.button:visited:hover,a.button:visited:active,a.button:visited:focus,input[type="button"]:hover,input[type="button"]:active,input[type="button"]:focus,input[type="reset"]:hover,input[type="reset"]:active,input[type="reset"]:focus,input[type="submit"]:hover,input[type="submit"]:active,input[type="submit"]:focus{background-color:rgba(85, 183, 78, 0.8);border-color:rgba(85, 183, 78, 0.8);}
+button,button:hover,button:active,button:focus,a.button,a.button:hover,a.button:active,a.button:focus,a.button:visited,a.button:visited:hover,a.button:visited:active,a.button:visited:focus,input[type="button"],input[type="button"]:hover,input[type="button"]:active,input[type="button"]:focus,input[type="reset"],input[type="reset"]:hover,input[type="reset"]:active,input[type="reset"]:focus,input[type="submit"],input[type="submit"]:hover,input[type="submit"]:active,input[type="submit"]:focus,.wp-block-button__link{color:#ffffff;}.main-navigation ul > li:hover > a,.main-navigation ul > li:hover > a:hover,.main-navigation ul > li:hover > a:visited,.main-navigation ul > li:hover > a:visited:hover,.main-navigation ul li.current-menu-item > a{color:#ffffff;}
+body{background-color:#ffffff;}.navigation.pagination .nav-links .page-numbers.current{color:#ffffff;}
+.site-header{background-color:#414242;}.site-header{-webkit-box-shadow:inset 0 0 0 9999em;-moz-box-shadow:inset 0 0 0 9999em;box-shadow:inset 0 0 0 9999em;color:rgba(65, 66, 66, 0.50);}
+.main-navigation-container,.main-navigation.open,.main-navigation ul ul,.main-navigation .sub-menu{background-color:#f5f5f5;}.side-masthead{background-color:#f5f5f5;}
+.site-footer{background-color:#eeeeee;}
+.site-info-wrapper{background-color:#ffffff;}.site-info-wrapper .social-menu a,.site-info-wrapper .social-menu a:visited,.site-info-wrapper .social-menu a:hover,.site-info-wrapper .social-menu a:visited:hover{color:#ffffff;}
+.has-primary-color{color:#03263B;}.has-primary-background-color{background-color:#03263B;}
+.has-secondary-color{color:#0b3954;}.has-secondary-background-color{background-color:#0b3954;}
+.has-tertiary-color{color:#bddae6;}.has-tertiary-background-color{background-color:#bddae6;}
+.has-quaternary-color{color:#ff6663;}.has-quaternary-background-color{background-color:#ff6663;}
+.has-quinary-color{color:#ffffff;}.has-quinary-background-color{background-color:#ffffff;}</style>
+<link rel="stylesheet" id="escapade-fonts-css" href="https://fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700%7CDroid+Serif%3A300%2C400%2C700&#038;subset=latin&#038;ver=1.8.9" type="text/css" media="all">
+<style id="escapade-fonts-inline-css" type="text/css">.site-title{font-family:"Oswald", sans-serif;}
+.main-navigation ul li a,.main-navigation ul li a:visited,button,a.button,a.fl-button,input[type="button"],input[type="reset"],input[type="submit"]{font-family:"Oswald", sans-serif;}
+h1,h2,h3,h4,h5,h6,label,legend,table th,dl dt,.entry-title,.widget-title{font-family:"Oswald", sans-serif;}
+body,p,ol li,ul li,dl dd,.fl-callout-text{font-family:"Droid Serif", sans-serif;}
+blockquote,.entry-meta,.entry-footer,.comment-list li .comment-meta .says,.comment-list li .comment-metadata,.comment-reply-link,#respond .logged-in-as{font-family:"Droid Serif", sans-serif;}</style>
+<script type="text/javascript" src="https://thatdatascienceguy.github.io/data-science-blog/wp-includes/js/jquery/jquery.min.js?ver=3.6.0" id="jquery-core-js"></script>
+<script type="text/javascript" src="https://thatdatascienceguy.github.io/data-science-blog/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.3.2" id="jquery-migrate-js"></script>
+<link rel="https://api.w.org/" href="https://thatdatascienceguy.github.io/data-science-blog/wp-json/">
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://thatdatascienceguy.github.io/data-science-blog/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://thatdatascienceguy.github.io/data-science-blog/wp-includes/wlwmanifest.xml"> 
+<meta name="generator" content="WordPress 5.8.3">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-3608842683617228",
+    enable_page_level_ads: true
+  });
+</script><style type="text/css">.site-title a,.site-title a:visited{color:757575;}</style>
+</head>
+
+<body class="archive date layout-two-column-default">
+
+	
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+	
+	<header id="masthead" class="site-header" role="banner">
+
+		
+		<div class="side-masthead">
+
+			
+<div class="menu-toggle" id="menu-toggle" role="button" tabindex="0">
+	<div></div>
+	<div></div>
+	<div></div>
+</div>
+<!-- #menu-toggle -->
+
+<div class="site-title-wrapper">
+
+	
+	<div class="site-title"><a href="https://thatdatascienceguy.github.io/data-science-blog/" rel="home">That Data Science Guy</a></div>
+	
+</div>
+<!-- .site-title-wrapper -->
+
+			
+<div class="main-navigation-container">
+
+	
+	<nav id="site-navigation" class="main-navigation">
+
+		<div class="menu-menu-container"><ul id="menu-menu" class="menu">
+<li id="menu-item-406" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-406"><a href="https://thatdatascienceguy.github.io/data-science-blog/">Welcome To My Website</a></li>
+<li id="menu-item-407" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-407"><a href="https://thatdatascienceguy.github.io/data-science-blog/welcome-to-my-website/blog-posts/">Blog Posts</a></li>
+</ul></div>
+	</nav><!-- #site-navigation -->
+
+	
+</div>
+
+			
+<nav class="social-menu">
+
+	
+</nav><!-- .social-menu -->
+
+		</div>
+
+		
+<div class="hero">
+
+	
+	<div class="hero-inner">
+
+		
+<div class="page-title-container">
+
+	<header class="page-header">
+
+		<h1 class="page-title">Month: August 2020</h1>
+	</header><!-- .entry-header -->
+
+</div>
+<!-- .page-title-container -->
+
+	</div>
+
+</div>
+
+	</header><!-- #masthead -->
+
+	<div id="page" class="hfeed site">
+
+		<div id="content" class="site-content">
+
+<section id="primary" class="content-area">
+
+	<main id="main" class="site-main" role="main">
+
+	
+<article id="post-366" class="post-366 post type-post status-publish format-standard hentry category-uncategorized tag-baby-names tag-babynames tag-data-science tag-r tag-shiny tag-shinyapp tag-thatdatascienceguy tag-web-app">
+
+	
+	
+		
+	
+	
+<header class="entry-header">
+
+	<div class="entry-header-row">
+
+		<div class="entry-header-column">
+
+			
+			
+				<h2 class="entry-title"><a href="https://thatdatascienceguy.github.io/data-science-blog/2020/08/07/web-app-for-viewing-baby-names-in-the-u-s-over-time/">Web App for Viewing Baby Names in the U.S Over Time</a></h2>
+
+			
+			
+		</div>
+<!-- .entry-header-column -->
+
+	</div>
+<!-- .entry-header-row -->
+
+</header><!-- .entry-header -->
+
+	
+<div class="entry-meta">
+
+	
+		<span class="posted-date">August 7, 2020</span>
+
+	
+	<span class="posted-author"><a href="https://thatdatascienceguy.github.io/data-science-blog/author/thatdatascienceguy/" title="Posts by thatdatascienceguy" rel="author">thatdatascienceguy</a></span>
+
+	
+		<span class="comments-number">
+
+			<a href="https://thatdatascienceguy.github.io/data-science-blog/2020/08/07/web-app-for-viewing-baby-names-in-the-u-s-over-time/#respond" class="comments-link">Leave a comment</a>
+		</span>
+
+	
+</div>
+<!-- .entry-meta -->
+
+	
+		
+<div class="entry-summary">
+
+	<p>Hello World! Ever dreamed of what to name your future children or curious how popular a particular name is? Love&hellip;</p>
+
+	<p><a class="button" href="https://thatdatascienceguy.github.io/data-science-blog/2020/08/07/web-app-for-viewing-baby-names-in-the-u-s-over-time/" aria-label="Continue reading Web App for Viewing Baby Names in the U.S Over Time">Continue Reading &rarr;</a></p>
+
+</div>
+<!-- .entry-summary -->
+
+	
+	
+<footer class="entry-footer">
+
+	<div class="entry-footer-right">
+
+		
+	</div>
+
+	
+		
+		
+		
+		
+			<span class="tags-links">
+
+				Filed under: <a href="https://thatdatascienceguy.github.io/data-science-blog/tag/baby-names/" rel="tag">baby names</a>, <a href="https://thatdatascienceguy.github.io/data-science-blog/tag/babynames/" rel="tag">babynames</a>, <a href="https://thatdatascienceguy.github.io/data-science-blog/tag/data-science/" rel="tag">data science</a>, <a href="https://thatdatascienceguy.github.io/data-science-blog/tag/r/" rel="tag">R</a>, <a href="https://thatdatascienceguy.github.io/data-science-blog/tag/shiny/" rel="tag">shiny</a>, <a href="https://thatdatascienceguy.github.io/data-science-blog/tag/shinyapp/" rel="tag">shinyapp</a>, <a href="https://thatdatascienceguy.github.io/data-science-blog/tag/thatdatascienceguy/" rel="tag">thatdatascienceguy</a>, <a href="https://thatdatascienceguy.github.io/data-science-blog/tag/web-app/" rel="tag">web app</a>
+			</span>
+
+		
+	
+</footer><!-- .entry-footer -->
+
+	
+</article><!-- #post-## -->
+
+	</main><!-- #main -->
+
+</section><!-- #primary -->
+
+
+<div id="secondary" class="widget-area" role="complementary">
+
+	      <aside id="mailpoet_form-2" class="widget widget_mailpoet_form">
+  
+      <h4 class="widget-title">Subscribe to my Blog</h4>
+  
+  <div class="
+    mailpoet_form_popup_overlay
+      "></div>
+  <div id="mailpoet_form_1" class="
+      mailpoet_form
+      mailpoet_form_widget
+      mailpoet_form_position_
+      mailpoet_form_animation_
+    ">
+    
+    <style type="text/css">.mailpoet_hp_email_label{display:none!important;}#mailpoet_form_1 .mailpoet_form {  }
+#mailpoet_form_1 .mailpoet_column_with_background { padding: 10px; }
+#mailpoet_form_1 .mailpoet_form_column:not(:first-child) { margin-left: 20px; }
+#mailpoet_form_1 .mailpoet_paragraph { line-height: 20px; margin-bottom: 20px; }
+#mailpoet_form_1 .mailpoet_segment_label, #mailpoet_form_1 .mailpoet_text_label, #mailpoet_form_1 .mailpoet_textarea_label, #mailpoet_form_1 .mailpoet_select_label, #mailpoet_form_1 .mailpoet_radio_label, #mailpoet_form_1 .mailpoet_checkbox_label, #mailpoet_form_1 .mailpoet_list_label, #mailpoet_form_1 .mailpoet_date_label { display: block; font-weight: normal; }
+#mailpoet_form_1 .mailpoet_text, #mailpoet_form_1 .mailpoet_textarea, #mailpoet_form_1 .mailpoet_select, #mailpoet_form_1 .mailpoet_date_month, #mailpoet_form_1 .mailpoet_date_day, #mailpoet_form_1 .mailpoet_date_year, #mailpoet_form_1 .mailpoet_date { display: block; }
+#mailpoet_form_1 .mailpoet_text, #mailpoet_form_1 .mailpoet_textarea { width: 200px; }
+#mailpoet_form_1 .mailpoet_checkbox {  }
+#mailpoet_form_1 .mailpoet_submit {  }
+#mailpoet_form_1 .mailpoet_divider {  }
+#mailpoet_form_1 .mailpoet_message {  }
+#mailpoet_form_1 .mailpoet_form_loading { width: 30px; text-align: center; line-height: normal; }
+#mailpoet_form_1 .mailpoet_form_loading > span { width: 5px; height: 5px; background-color: #5b5b5b; }#mailpoet_form_1{border-radius: 0px;text-align: left;}#mailpoet_form_1 form.mailpoet_form {padding: 20px;}#mailpoet_form_1{width: 100%;}#mailpoet_form_1 .mailpoet_message {margin: 0; padding: 0 20px;}#mailpoet_form_1 .mailpoet_paragraph.last {margin-bottom: 0} @media (max-width: 500px) {#mailpoet_form_1 {background-image: none;}} @media (min-width: 500px) {#mailpoet_form_1 .last .mailpoet_paragraph:last-child {margin-bottom: 0}}  @media (max-width: 500px) {#mailpoet_form_1 .mailpoet_form_column:last-child .mailpoet_paragraph:last-child {margin-bottom: 0}}</style>
+
+    <form target="_self" method="post" action="https://thatdatascienceguy.github.io/data-science-blog/wp-admin/admin-post.php?action=mailpoet_subscription_form" class="mailpoet_form mailpoet_form_form mailpoet_form_widget" novalidate data-delay="" data-exit-intent-enabled="" data-font-family="">
+      <input type="hidden" name="data[form_id]" value="1">
+      <input type="hidden" name="token" value="4ae965aefa">
+      <input type="hidden" name="api_version" value="v1">
+      <input type="hidden" name="endpoint" value="subscribers">
+      <input type="hidden" name="mailpoet_method" value="subscribe">
+
+      <label class="mailpoet_hp_email_label">Please leave this field empty<input type="email" name="data[email]"></label><p class="mailpoet_form_paragraph " style="text-align: left">Subscribe to my blog and be notified when new posts are published!</p>
+<div class="mailpoet_paragraph ">
+<label class="mailpoet_text_label" data-automation-id="form_first_name_label">First name</label><input type="text" class="mailpoet_text" name="data[form_field_NDdjODA0YTgzYWU0X2ZpcnN0X25hbWU=]" title="First name" value="" style="padding:5px;margin: 0 auto 0 0;" data-automation-id="form_first_name" data-parsley-names="[&quot;Please specify a valid name.&quot;,&quot;Addresses in names are not permitted, please add your name instead.&quot;]">
+</div>
+<div class="mailpoet_paragraph ">
+<label class="mailpoet_text_label" data-automation-id="form_email_label">Email <span class="mailpoet_required">*</span></label><input type="email" class="mailpoet_text" name="data[form_field_NGRjYWE4NWM3NWRhX2VtYWls]" title="Email" value="" style="padding:5px;margin: 0 auto 0 0;" data-automation-id="form_email" data-parsley-required="true" data-parsley-minlength="6" data-parsley-maxlength="150" data-parsley-error-message="Please specify a valid email address." data-parsley-required-message="This field is required.">
+</div>
+<div class="mailpoet_paragraph ">
+<input type="submit" class="mailpoet_submit" value="Subscribe!" data-automation-id="subscribe-submit-button" style="padding:5px;margin: 0 auto 0 0;border-color:transparent;"><span class="mailpoet_form_loading"><span class="mailpoet_bounce1"></span><span class="mailpoet_bounce2"></span><span class="mailpoet_bounce3"></span></span>
+</div>
+
+      <div class="mailpoet_message">
+        <p class="mailpoet_validate_success" style="display:none;">Check your inbox or spam folder to confirm your subscription.
+        </p>
+        <p class="mailpoet_validate_error" style="display:none;">        </p>
+      </div>
+    </form>
+  </div>
+
+      </aside>
+  
+		<aside id="recent-posts-2" class="widget widget_recent_entries">
+		<h4 class="widget-title">Recent Posts</h4>
+		<ul>
+											<li>
+					<a href="https://thatdatascienceguy.github.io/data-science-blog/2020/12/03/extracting-launchboxs-video-game-metadata-part-2-getting-data-of-video-games/">Extracting LaunchBox’s Video Game Metadata Part 2: Getting Data of Video Games</a>
+									</li>
+											<li>
+					<a href="https://thatdatascienceguy.github.io/data-science-blog/2020/11/12/extracting-launchboxs-video-game-metadata-getting-data-of-video-game-consoles/">Extracting LaunchBox&#8217;s Video Game Metadata: Getting Data of Video Game Consoles</a>
+									</li>
+											<li>
+					<a href="https://thatdatascienceguy.github.io/data-science-blog/2020/08/07/web-app-for-viewing-baby-names-in-the-u-s-over-time/">Web App for Viewing Baby Names in the U.S Over Time</a>
+									</li>
+											<li>
+					<a href="https://thatdatascienceguy.github.io/data-science-blog/2020/07/16/looking-at-baseball-statistics-from-the-sean-lahman-database/">Looking at Baseball Statistics From the Sean Lahman Database</a>
+									</li>
+											<li>
+					<a href="https://thatdatascienceguy.github.io/data-science-blog/2020/07/13/analyzing-powerlifting-data/">Analyzing Powerlifting Data</a>
+									</li>
+					</ul>
+
+		</aside><aside id="archives-3" class="widget widget_archive"><h4 class="widget-title">Archives</h4>
+			<ul>
+					<li><a href="https://thatdatascienceguy.github.io/data-science-blog/2020/12/">December 2020</a></li>
+	<li><a href="https://thatdatascienceguy.github.io/data-science-blog/2020/11/">November 2020</a></li>
+	<li><a href="https://thatdatascienceguy.github.io/data-science-blog/2020/08/" aria-current="page">August 2020</a></li>
+	<li><a href="https://thatdatascienceguy.github.io/data-science-blog/2020/07/">July 2020</a></li>
+	<li><a href="https://thatdatascienceguy.github.io/data-science-blog/2019/01/">January 2019</a></li>
+			</ul>
+
+			</aside>
+</div>
+<!-- #secondary -->
+
+		</div>
+<!-- #content -->
+
+		
+		<footer id="colophon" class="site-footer">
+
+			<div class="site-footer-inner">
+
+				
+			</div>
+<!-- .site-footer-inner -->
+
+		</footer><!-- #colophon -->
+
+		
+<div class="site-info-wrapper">
+
+	<div class="site-info">
+
+		<div class="site-info-inner">
+
+			
+<div class="site-info-text">
+
+	Copyright &copy; 2022 That Data Science Guy &mdash; Escapade WordPress theme by <a href="https://www.godaddy.com/" rel="author nofollow">GoDaddy</a>
+</div>
+
+		</div>
+<!-- .site-info-inner -->
+
+	</div>
+<!-- .site-info -->
+
+</div>
+<!-- .site-info-wrapper -->
+
+	</div>
+<!-- #page -->
+
+	<link rel="stylesheet" id="mailpoet_public-css" href="https://thatdatascienceguy.github.io/data-science-blog/wp-content/plugins/mailpoet/assets/dist/css/mailpoet-public.dc375656.css?ver=5.8.3" type="text/css" media="all">
+<link rel="stylesheet" id="mailpoet_custom_fonts_0-css" href="https://fonts.googleapis.com/css?family=Abril+FatFace%3A400%2C400i%2C700%2C700i%7CAlegreya%3A400%2C400i%2C700%2C700i%7CAlegreya+Sans%3A400%2C400i%2C700%2C700i%7CAmatic+SC%3A400%2C400i%2C700%2C700i%7CAnonymous+Pro%3A400%2C400i%2C700%2C700i%7CArchitects+Daughter%3A400%2C400i%2C700%2C700i%7CArchivo%3A400%2C400i%2C700%2C700i%7CArchivo+Narrow%3A400%2C400i%2C700%2C700i%7CAsap%3A400%2C400i%2C700%2C700i%7CBarlow%3A400%2C400i%2C700%2C700i%7CBioRhyme%3A400%2C400i%2C700%2C700i%7CBonbon%3A400%2C400i%2C700%2C700i%7CCabin%3A400%2C400i%2C700%2C700i%7CCairo%3A400%2C400i%2C700%2C700i%7CCardo%3A400%2C400i%2C700%2C700i%7CChivo%3A400%2C400i%2C700%2C700i%7CConcert+One%3A400%2C400i%2C700%2C700i%7CCormorant%3A400%2C400i%2C700%2C700i%7CCrimson+Text%3A400%2C400i%2C700%2C700i%7CEczar%3A400%2C400i%2C700%2C700i%7CExo+2%3A400%2C400i%2C700%2C700i%7CFira+Sans%3A400%2C400i%2C700%2C700i%7CFjalla+One%3A400%2C400i%2C700%2C700i%7CFrank+Ruhl+Libre%3A400%2C400i%2C700%2C700i%7CGreat+Vibes%3A400%2C400i%2C700%2C700i&#038;ver=5.8.3" type="text/css" media="all">
+<link rel="stylesheet" id="mailpoet_custom_fonts_1-css" href="https://fonts.googleapis.com/css?family=Heebo%3A400%2C400i%2C700%2C700i%7CIBM+Plex%3A400%2C400i%2C700%2C700i%7CInconsolata%3A400%2C400i%2C700%2C700i%7CIndie+Flower%3A400%2C400i%2C700%2C700i%7CInknut+Antiqua%3A400%2C400i%2C700%2C700i%7CInter%3A400%2C400i%2C700%2C700i%7CKarla%3A400%2C400i%2C700%2C700i%7CLibre+Baskerville%3A400%2C400i%2C700%2C700i%7CLibre+Franklin%3A400%2C400i%2C700%2C700i%7CMontserrat%3A400%2C400i%2C700%2C700i%7CNeuton%3A400%2C400i%2C700%2C700i%7CNotable%3A400%2C400i%2C700%2C700i%7CNothing+You+Could+Do%3A400%2C400i%2C700%2C700i%7CNoto+Sans%3A400%2C400i%2C700%2C700i%7CNunito%3A400%2C400i%2C700%2C700i%7COld+Standard+TT%3A400%2C400i%2C700%2C700i%7COxygen%3A400%2C400i%2C700%2C700i%7CPacifico%3A400%2C400i%2C700%2C700i%7CPoppins%3A400%2C400i%2C700%2C700i%7CProza+Libre%3A400%2C400i%2C700%2C700i%7CPT+Sans%3A400%2C400i%2C700%2C700i%7CPT+Serif%3A400%2C400i%2C700%2C700i%7CRakkas%3A400%2C400i%2C700%2C700i%7CReenie+Beanie%3A400%2C400i%2C700%2C700i%7CRoboto+Slab%3A400%2C400i%2C700%2C700i&#038;ver=5.8.3" type="text/css" media="all">
+<link rel="stylesheet" id="mailpoet_custom_fonts_2-css" href="https://fonts.googleapis.com/css?family=Ropa+Sans%3A400%2C400i%2C700%2C700i%7CRubik%3A400%2C400i%2C700%2C700i%7CShadows+Into+Light%3A400%2C400i%2C700%2C700i%7CSpace+Mono%3A400%2C400i%2C700%2C700i%7CSpectral%3A400%2C400i%2C700%2C700i%7CSue+Ellen+Francisco%3A400%2C400i%2C700%2C700i%7CTitillium+Web%3A400%2C400i%2C700%2C700i%7CUbuntu%3A400%2C400i%2C700%2C700i%7CVarela%3A400%2C400i%2C700%2C700i%7CVollkorn%3A400%2C400i%2C700%2C700i%7CWork+Sans%3A400%2C400i%2C700%2C700i%7CYatra+One%3A400%2C400i%2C700%2C700i&#038;ver=5.8.3" type="text/css" media="all">
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js?ver=5.8.3" id="mathjax-js"></script>
+<script type="text/javascript" src="https://thatdatascienceguy.github.io/data-science-blog/wp-content/themes/primer/assets/js/navigation.min.js?ver=1.8.9" id="primer-navigation-js"></script>
+<script type="text/javascript" src="https://thatdatascienceguy.github.io/data-science-blog/wp-includes/js/wp-embed.min.js?ver=5.8.3" id="wp-embed-js"></script>
+<script type="text/javascript" id="mailpoet_public-js-extra">
+/* <![CDATA[ */
+var MailPoetForm = {"ajax_url":"https:\/\/thatdatascienceguy.github.io\/data-science-blog\/wp-admin\/admin-ajax.php","is_rtl":""};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://thatdatascienceguy.github.io/data-science-blog/wp-content/plugins/mailpoet/assets/dist/js/public.161b23c2.js?ver=3.75.1" id="mailpoet_public-js"></script>
+<script type="text/javascript" id="mailpoet_public-js-after">
+function initMailpoetTranslation() {
+  if (typeof MailPoet !== 'undefined') {
+    MailPoet.I18n.add('ajaxFailedErrorMessage', 'An error has happened while performing a request, please try again later.')
+  } else {
+    setTimeout(initMailpoetTranslation, 250);
+  }
+}
+setTimeout(initMailpoetTranslation, 250);
+</script>
+	<script>
+	/* IE11 skip link focus fix */
+	/(trident|msie)/i.test(navigator.userAgent)&&document.getElementById&&window.addEventListener&&window.addEventListener("hashchange",function(){var t,e=location.hash.substring(1);/^[A-z0-9_-]+$/.test(e)&&(t=document.getElementById(e))&&(/^(?:a|select|input|button|textarea)$/i.test(t.tagName)||(t.tabIndex=-1),t.focus())},!1);
+	</script>
+	
+</body>
+
+</html>

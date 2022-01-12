@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>video games &#8211; That Data Science Guy</title>
+	<atom:link href="https://thatdatascienceguy.github.io/data-science-blog/tag/video-games/feed/" rel="self" type="application/rss+xml" />
+	<link>https://thatdatascienceguy.github.io/data-science-blog/</link>
+	<description></description>
+	<lastBuildDate>Mon, 07 Dec 2020 16:32:49 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=5.8.3</generator>
+	<item>
+		<title>Extracting LaunchBox’s Video Game Metadata Part 2: Getting Data of Video Games</title>
+		<link>https://thatdatascienceguy.github.io/data-science-blog/2020/12/03/extracting-launchboxs-video-game-metadata-part-2-getting-data-of-video-games/</link>
+					<comments>https://thatdatascienceguy.github.io/data-science-blog/2020/12/03/extracting-launchboxs-video-game-metadata-part-2-getting-data-of-video-games/#respond</comments>
+		
+		<dc:creator><![CDATA[thatdatascienceguy]]></dc:creator>
+		<pubDate>Thu, 03 Dec 2020 23:15:24 +0000</pubDate>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[data science]]></category>
+		<category><![CDATA[launchbox-app]]></category>
+		<category><![CDATA[python]]></category>
+		<category><![CDATA[thatdatascienceguy]]></category>
+		<category><![CDATA[video games]]></category>
+		<category><![CDATA[xml]]></category>
+		<guid isPermaLink="false">http://34.193.228.138/?p=510</guid>
+
+					<description><![CDATA[Hello world!!! Just like I promised in my last post, I have also created a data set of video games&#8230;]]></description>
+										<content:encoded><![CDATA[
+<p>Hello world!!!</p>
+
+
+
+<p>Just like I promised in my last post, I have also created a data set of video games from LaunchBox&#8217;s (<a href="https://www.launchbox-app.com/" target="_blank" rel="noreferrer noopener">https://www.launchbox-app.com/</a>) XML data.</p>
+
+
+
+<p>Folks I gotta tell you, looking at the data that LaunchBox has, there appears to be over 108k+ video games throughout history!!!</p>
+
+
+
+<p>That&#8217;s a lot of game play and a lot of mashing buttons you could do many generations over lol <img src="https://s.w.org/images/core/emoji/13.1.0/72x72/1f642.png" alt="🙂" class="wp-smiley" style="height: 1em; max-height: 1em;" /></p>
+
+
+
+<p>In this blog post, I will show you how I took LaunchBox&#8217;s metadata XML file and was able to get a list of games and their attributes into a CSV file.</p>
+
+
+
+<p><strong>Disclaimer: All data and credit goes to LaunchBox. I do not own any rights to the data. The blog and the results of the data are for entertainment purposes only.</strong></p>
+
+
+
+<h2>Getting the Data</h2>
+
+
+
+<p></p>
+
+
+
+<p>Much like getting the video game platforms data, the same approach will be applied using Python. Instead of reading in the Platforms.xml file, I&#8217;m going to read in data from the Metadata.xml file. It&#8217;s a large file that contains all the metadata on what LaunchBox has on it&#8217;s gaming database.</p>
+
+
+
+<p>The metadata XML file can be downloaded from my Github repository which I will include at the end of the article.</p>
+
+
+
+<p>The code below shows how the Metadata.xml file was extracted:</p>
+
+
+
+<pre class="wp-block-code"><code>from datetime import datetime
+import xml.etree.ElementTree as ET
+import pandas as pd
+import re
+import seaborn as sb
+import matplotlib.pyplot as plt
+
+# read in the data
+videogames_xml = ET.parse('Metadata.xml')
+root_xml = videogames_xml.getroot()</code></pre>
+
+
+
+<p>Next, we make a list of attributes we are going to store our data. Features include things like name, release date, genre, and information about the companies or parties in the making of the game.</p>
+
+
+
+<div class="wp-block-group"><div class="wp-block-group__inner-container">
+<pre class="wp-block-code"><code># Video Game attributes to extract
+videogame_attrs = &#91;"Name", "ReleaseDate", "ReleaseYear", "Developer", "Platform",
+	 "Genres", "Publisher", "MaxPlayers", "ESRB", "Overview", "Cooperative"]</code></pre>
+</div></div>
+
+
+
+<h2>Making the data readable as a DataFrame</h2>
+
+
+
+<p></p>
+
+
+
+<p>The next step was to look at the metadata XML file and for each game:</p>
+
+
+
+<ul><li>Retrieve all the contents previously mentioned in this blog and store them in a list.</li><li>Append that list in another list.</li><li>Convert the embedded list into a DataFrame after looping through all video games.</li></ul>
+
+
+
+<p>The metadata.XML file has many tags and a large file to observe. What we are interested in is the &lt;Game&gt; tags and their data.</p>
+
+
+
+<p>Here is the code snippet:</p>
+
+
+
+<div class="wp-block-group"><div class="wp-block-group__inner-container">
+<pre class="wp-block-code"><code># store list to keep video game data
+rows = &#91;]
+
+# loop through each game tag and for each game, get the data per
+# videogame_attrs and store in a dictionary and then at the end,
+# store in the rows list.
+for game in root_xml.findall('Game'):
+	data = &#91;] # store game data
+	# loop through each attribute
+	for field in videogame_attrs:
+		if game is not None and game.find(field) is not None:
+			data.append(game.find(field).text) # append the data
+		else:
+			data.append(None) # data not found, just set to None
+	rows.append({videogame_attrs&#91;i]: data&#91;i] # put the game data in the list
+			  for i in range(0, len(videogame_attrs))})
+
+# Take all the games and their data and put in a dataset/dataframe
+games = pd.DataFrame(rows, columns = videogame_attrs)
+</code></pre>
+</div></div>
+
+
+
+<p>The variable &#8216;games&#8217; contains the DataFrame of all video games in the Launchbox-app database.</p>
+
+
+
+<h2>Cleaning the Data</h2>
+
+
+
+<p></p>
+
+
+
+<p>With the data in a dataframe, it is much easier to analyze and clean and alter.</p>
+
+
+
+<p>The &#8216;ReleaseDate&#8217; column has the date and time and just like the previous post of video game consoles, i&#8217;ll be removing the time and keeping the date.</p>
+
+
+
+<p>I also formatted the dates to a certain date format for sorting purposes.</p>
+
+
+
+<pre class="wp-block-code"><code># There are time/timezones in the 'ReleaseDate' column starting with 'T'
+# remove them and just keep the data
+dates = &#91;re.sub("T.*", "", date)
+		 if date is not None else None
+		 for date in games&#91;"ReleaseDate"]]
+games&#91;"ReleaseDate"] = dates
+
+# format the Date as well for sorting purposes
+dates = &#91;datetime.strptime(date, "%Y-%m-%d") 
+		 if date is not None else None
+		 for date in dates]
+
+# save dataframe in a csv file
+games.to_csv("games.csv", index=False)</code></pre>
+
+
+
+<p>I also saved the dataset as a CSV file in case you want to analyze the data for yourself.</p>
+
+
+
+<h2>Running Video Game Queries</h2>
+
+
+
+<p><a href="http://34.193.228.138/wp-admin/edit.php?post_type=post"></a></p>
+
+
+
+<p>Well, if you read this far, congrats. No really <img src="https://s.w.org/images/core/emoji/13.1.0/72x72/1f642.png" alt="🙂" class="wp-smiley" style="height: 1em; max-height: 1em;" /></p>
+
+
+
+<p>With our new found data, let&#8217;s get some answers on video games.</p>
+
+
+
+<h3>Give me all the Mega Man video games ever made</h3>
+
+
+
+<p></p>
+
+
+
+<p>You know Mega Man? You know, the &#8216;Blue Bomber&#8217;? The super fighting robot, fighting to save the world from the evil robot master Dr. Wily?? (Cue the Mega Man 1990&#8217;s animated theme song or your own personal Mega Man soundtrack)</p>
+
+
+
+<p>Mega Man is a popular run-and-gun video game franchise that&#8217;s been around for decades.</p>
+
+
+
+<p>Let&#8217;s see which MegaMan games existed:</p>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="957" height="440" src="http://34.193.228.138/wp-content/uploads/2020/12/MegaMan-Query.png" alt="" class="wp-image-526" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/12/MegaMan-Query.png 957w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/12/MegaMan-Query-300x138.png 300w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/12/MegaMan-Query-768x353.png 768w" sizes="(max-width: 957px) 100vw, 957px" /></figure>
+
+
+
+<p>Well that is a lot of running and gunning and a lot of robot masters defeated <img src="https://s.w.org/images/core/emoji/13.1.0/72x72/1f642.png" alt="🙂" class="wp-smiley" style="height: 1em; max-height: 1em;" /></p>
+
+
+
+<h3>What were the last few games created for the Sega Genesis console?</h3>
+
+
+
+<p></p>
+
+
+
+<p>Where are all my SEGA lovers at? Who is old enough to remember the Sega and Nintendo console war?</p>
+
+
+
+<p>So the below query is to see which were the final games of the SEGA Genesis before it was decommissioned.</p>
+
+
+
+<p>Several online sources will say &#8220;Frogger&#8221; was the last game for the SEGA Genesis while the LaunchBox-app.com site has &#8220;Duke Nukem 3D&#8221; as the last game released.</p>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="985" height="790" src="http://34.193.228.138/wp-content/uploads/2020/12/sega_games.png" alt="" class="wp-image-535" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/12/sega_games.png 985w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/12/sega_games-300x241.png 300w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/12/sega_games-768x616.png 768w" sizes="(max-width: 985px) 100vw, 985px" /></figure>
+
+
+
+<p>&#8220;It&#8217;s time to kick a** and chew bubble gum. And I&#8217;m all out of gum.&#8221;</p>
+
+
+
+<p>Yeah&#8230;I&#8217;ll just stick to my day job lol</p>
+
+
+
+<h3>How many Nintendo video games are out there? How many PlayStation games out there?</h3>
+
+
+
+<p></p>
+
+
+
+<p>Say no more gamers. I got you covered.</p>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="988" height="678" src="http://34.193.228.138/wp-content/uploads/2020/12/n_games.png" alt="" class="wp-image-536" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/12/n_games.png 988w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/12/n_games-300x206.png 300w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/12/n_games-768x527.png 768w" sizes="(max-width: 988px) 100vw, 988px" /></figure>
+
+
+
+<h3>Last one: A bar plot on number of games created by year</h3>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="761" height="709" src="http://34.193.228.138/wp-content/uploads/2020/12/plot_number_of_games.png" alt="" class="wp-image-537" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/12/plot_number_of_games.png 761w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/12/plot_number_of_games-300x280.png 300w" sizes="(max-width: 761px) 100vw, 761px" /></figure>
+
+
+
+<p>Looks like the first 25 years games were created at a exponential rate and growing followed by some declines and peaks.</p>
+
+
+
+<p>Also note that not many games were not made in 2020. This could have been due to the economic slowdown we had and/or the COVID-19 pandemic.</p>
+
+
+
+<h2>Summary</h2>
+
+
+
+<p></p>
+
+
+
+<p>I had so much fun working on this data set <img src="https://s.w.org/images/core/emoji/13.1.0/72x72/1f642.png" alt="🙂" class="wp-smiley" style="height: 1em; max-height: 1em;" /> I can spend hours learning about video games new and old. I hope you enjoyed this blog post and how to extract video game data and gain and answer questions and gain insight. This data set is much larger than the previous post I used. As that is the case, you have a lot more data to play around with and many questions about the data can be looked into.</p>
+
+
+
+<p>What other questions would you like me to answer given the data? Let me know your thoughts and comment what you would like.</p>
+
+
+
+<p>Link to source code and the CSV (comma seperated value) file for the data can be found here:</p>
+
+
+
+<p><a href="https://github.com/thatdatascienceguy/thatdatascienceguyblog/tree/master/VideoGameData">https://github.com/thatdatascie</a><a href="https://github.com/thatdatascienceguy/thatdatascienceguyblog/tree/master/VideoGameData" target="_blank" rel="noreferrer noopener">nceguy/thatdatascienceguyblog/tree/master/VideoGameData</a></p>
+
+
+
+<p>The CSV file for video game is called &#8216;games.csv&#8217;. You can use software such as Excel or notepad to open this kind of file if you&#8217;re interested.</p>
+
+
+
+<p>For those who love working with databases and know SQL, I have two .db files &#8216;Video_Game_Platforms_DB.db&#8217; and &#8216;Video_Games_DB.db&#8217; which have database tables for video game platforms and video games respectively.</p>
+
+
+
+<p>Lastly, I want to give a big thanks and shout out to LaunchBox for providing me the data to show you guys. This blog post and the previous one would not have been possible if it weren&#8217;t for them.</p>
+
+
+
+<p>Take care and stay safe! <img src="https://s.w.org/images/core/emoji/13.1.0/72x72/1f642.png" alt="🙂" class="wp-smiley" style="height: 1em; max-height: 1em;" /></p>
+]]></content:encoded>
+					
+					<wfw:commentRss>https://thatdatascienceguy.github.io/data-science-blog/2020/12/03/extracting-launchboxs-video-game-metadata-part-2-getting-data-of-video-games/feed/</wfw:commentRss>
+			<slash:comments>0</slash:comments>
+		
+		
+			</item>
+	</channel>
+</rss>

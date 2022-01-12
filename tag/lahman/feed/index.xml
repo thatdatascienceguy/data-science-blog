@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>lahman &#8211; That Data Science Guy</title>
+	<atom:link href="https://thatdatascienceguy.github.io/data-science-blog/tag/lahman/feed/" rel="self" type="application/rss+xml" />
+	<link>https://thatdatascienceguy.github.io/data-science-blog/</link>
+	<description></description>
+	<lastBuildDate>Thu, 16 Jul 2020 15:44:26 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=5.8.3</generator>
+	<item>
+		<title>Looking at Baseball Statistics From the Sean Lahman Database</title>
+		<link>https://thatdatascienceguy.github.io/data-science-blog/2020/07/16/looking-at-baseball-statistics-from-the-sean-lahman-database/</link>
+					<comments>https://thatdatascienceguy.github.io/data-science-blog/2020/07/16/looking-at-baseball-statistics-from-the-sean-lahman-database/#respond</comments>
+		
+		<dc:creator><![CDATA[thatdatascienceguy]]></dc:creator>
+		<pubDate>Thu, 16 Jul 2020 15:12:56 +0000</pubDate>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[baseball]]></category>
+		<category><![CDATA[lahman]]></category>
+		<category><![CDATA[MLB]]></category>
+		<category><![CDATA[R]]></category>
+		<category><![CDATA[seanlahman]]></category>
+		<category><![CDATA[shiny]]></category>
+		<category><![CDATA[shinyapp]]></category>
+		<guid isPermaLink="false">http://34.193.228.138/?p=344</guid>
+
+					<description><![CDATA[Hello world! Time to play ball!!! 🙂 I was looking into baseball statistics and always wanted to look into baseball&#8230;]]></description>
+										<content:encoded><![CDATA[
+<div class="wp-block-image"><figure class="aligncenter size-large is-resized"><img loading="lazy" src="http://34.193.228.138/wp-content/uploads/2020/07/green-ball-on-sand-257970-1024x683.jpg" alt="" class="wp-image-360" width="439" height="292" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/green-ball-on-sand-257970-1024x683.jpg 1024w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/green-ball-on-sand-257970-300x200.jpg 300w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/green-ball-on-sand-257970-768x512.jpg 768w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/green-ball-on-sand-257970-1536x1024.jpg 1536w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/green-ball-on-sand-257970-2048x1365.jpg 2048w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/green-ball-on-sand-257970-1600x1067.jpg 1600w" sizes="(max-width: 439px) 100vw, 439px" /><figcaption><a href="https://www.pexels.com/photo/green-ball-on-sand-257970/">https://www.pexels.com/photo/green-ball-on-sand-257970/</a></figcaption></figure></div>
+
+
+
+<p>Hello world! Time to play ball!!! <img src="https://s.w.org/images/core/emoji/13.1.0/72x72/1f642.png" alt="🙂" class="wp-smiley" style="height: 1em; max-height: 1em;" /></p>
+
+
+
+<p>I was looking into baseball statistics and always wanted to look into baseball statistics especially historical data. Baseball is not only considered by some to be America&#8217;s pastime, but also one of the most statistical sports in the world. </p>
+
+
+
+<p>I came across the Lahman Baseball database: <a href="http://www.seanlahman.com/baseball-archive/statistics/">http://www.seanlahman.com/baseball-archive/statistics/</a> created by Author and Journalist Sean Lahman which has MLB records of baseball games dating all the way back to 1871. I decided to use the statistical programming language R and Shiny, a R package which one can create interactive web apps.</p>
+
+
+
+<p>The app below allows you to enter a baseball player&#8217;s first and last name and what kind of data you want to look at. Data is available from 1871 up to 2019. (post season is not included) Available options are</p>
+
+
+
+<ul><li>fielding</li><li>batting</li><li>pitching</li></ul>
+
+
+
+<p>For each choice you select, you&#8217;ll see the selected baseball player&#8217;s stats at the bottom. </p>
+
+
+
+<p>Also, for each position you select, you can also select the statistic you want to plot. This will create a bar plot of year vs the statistic you selected.</p>
+
+
+
+<p>Check out the app! Learn about baseball player stats and how they were throughout their career. If you want to have baseball conversations and/or debates, pull up this app; it&#8217;ll definitely be something to talk about and share with other people.</p>
+
+
+
+<p>Last but not least, I want to give a big thanks and shout out to the man himself Sean Lahman for making this data available and free to download. I would not have been able to make the app if it wasn&#8217;t for him and his work. Thanks Sean.</p>
+
+
+
+<iframe loading="lazy" width="100%" height="700px" src="https://thatdatascienceguy.shinyapps.io/BaseballApp/" allowfullscreen="allowfullscreen">
+</iframe>
+
+
+
+<p><strong>Please note that the app will disconnect if you are not using if after about 15 minutes. Refresh your browser and the app should come up.</strong></p>
+
+
+
+<p>Github source code for the app: <a href="https://github.com/thatdatascienceguy/thatdatascienceguyblog/tree/master/BaseballApp">https://github.com/thatdatascienceguy/thatdatascienceguyblog/tree/master/BaseballApp</a></p>
+
+
+
+<p>shinyapps.io link to the application itself: <a href="https://thatdatascienceguy.shinyapps.io/BaseballApp/">https://thatdatascienceguy.shinyapps.io/BaseballApp/</a></p>
+]]></content:encoded>
+					
+					<wfw:commentRss>https://thatdatascienceguy.github.io/data-science-blog/2020/07/16/looking-at-baseball-statistics-from-the-sean-lahman-database/feed/</wfw:commentRss>
+			<slash:comments>0</slash:comments>
+		
+		
+			</item>
+	</channel>
+</rss>

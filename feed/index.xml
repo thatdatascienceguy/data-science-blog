@@ -1,0 +1,1172 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>That Data Science Guy</title>
+	<atom:link href="https://thatdatascienceguy.github.io/data-science-blog/feed/" rel="self" type="application/rss+xml" />
+	<link>https://thatdatascienceguy.github.io/data-science-blog/</link>
+	<description></description>
+	<lastBuildDate>Mon, 07 Dec 2020 16:32:49 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=5.8.3</generator>
+	<item>
+		<title>Extracting LaunchBox’s Video Game Metadata Part 2: Getting Data of Video Games</title>
+		<link>https://thatdatascienceguy.github.io/data-science-blog/2020/12/03/extracting-launchboxs-video-game-metadata-part-2-getting-data-of-video-games/</link>
+					<comments>https://thatdatascienceguy.github.io/data-science-blog/2020/12/03/extracting-launchboxs-video-game-metadata-part-2-getting-data-of-video-games/#respond</comments>
+		
+		<dc:creator><![CDATA[thatdatascienceguy]]></dc:creator>
+		<pubDate>Thu, 03 Dec 2020 23:15:24 +0000</pubDate>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[data science]]></category>
+		<category><![CDATA[launchbox-app]]></category>
+		<category><![CDATA[python]]></category>
+		<category><![CDATA[thatdatascienceguy]]></category>
+		<category><![CDATA[video games]]></category>
+		<category><![CDATA[xml]]></category>
+		<guid isPermaLink="false">http://34.193.228.138/?p=510</guid>
+
+					<description><![CDATA[Hello world!!! Just like I promised in my last post, I have also created a data set of video games&#8230;]]></description>
+										<content:encoded><![CDATA[
+<p>Hello world!!!</p>
+
+
+
+<p>Just like I promised in my last post, I have also created a data set of video games from LaunchBox&#8217;s (<a href="https://www.launchbox-app.com/" target="_blank" rel="noreferrer noopener">https://www.launchbox-app.com/</a>) XML data.</p>
+
+
+
+<p>Folks I gotta tell you, looking at the data that LaunchBox has, there appears to be over 108k+ video games throughout history!!!</p>
+
+
+
+<p>That&#8217;s a lot of game play and a lot of mashing buttons you could do many generations over lol <img src="https://s.w.org/images/core/emoji/13.1.0/72x72/1f642.png" alt="🙂" class="wp-smiley" style="height: 1em; max-height: 1em;" /></p>
+
+
+
+<p>In this blog post, I will show you how I took LaunchBox&#8217;s metadata XML file and was able to get a list of games and their attributes into a CSV file.</p>
+
+
+
+<p><strong>Disclaimer: All data and credit goes to LaunchBox. I do not own any rights to the data. The blog and the results of the data are for entertainment purposes only.</strong></p>
+
+
+
+<h2>Getting the Data</h2>
+
+
+
+<p></p>
+
+
+
+<p>Much like getting the video game platforms data, the same approach will be applied using Python. Instead of reading in the Platforms.xml file, I&#8217;m going to read in data from the Metadata.xml file. It&#8217;s a large file that contains all the metadata on what LaunchBox has on it&#8217;s gaming database.</p>
+
+
+
+<p>The metadata XML file can be downloaded from my Github repository which I will include at the end of the article.</p>
+
+
+
+<p>The code below shows how the Metadata.xml file was extracted:</p>
+
+
+
+<pre class="wp-block-code"><code>from datetime import datetime
+import xml.etree.ElementTree as ET
+import pandas as pd
+import re
+import seaborn as sb
+import matplotlib.pyplot as plt
+
+# read in the data
+videogames_xml = ET.parse('Metadata.xml')
+root_xml = videogames_xml.getroot()</code></pre>
+
+
+
+<p>Next, we make a list of attributes we are going to store our data. Features include things like name, release date, genre, and information about the companies or parties in the making of the game.</p>
+
+
+
+<div class="wp-block-group"><div class="wp-block-group__inner-container">
+<pre class="wp-block-code"><code># Video Game attributes to extract
+videogame_attrs = &#91;"Name", "ReleaseDate", "ReleaseYear", "Developer", "Platform",
+	 "Genres", "Publisher", "MaxPlayers", "ESRB", "Overview", "Cooperative"]</code></pre>
+</div></div>
+
+
+
+<h2>Making the data readable as a DataFrame</h2>
+
+
+
+<p></p>
+
+
+
+<p>The next step was to look at the metadata XML file and for each game:</p>
+
+
+
+<ul><li>Retrieve all the contents previously mentioned in this blog and store them in a list.</li><li>Append that list in another list.</li><li>Convert the embedded list into a DataFrame after looping through all video games.</li></ul>
+
+
+
+<p>The metadata.XML file has many tags and a large file to observe. What we are interested in is the &lt;Game&gt; tags and their data.</p>
+
+
+
+<p>Here is the code snippet:</p>
+
+
+
+<div class="wp-block-group"><div class="wp-block-group__inner-container">
+<pre class="wp-block-code"><code># store list to keep video game data
+rows = &#91;]
+
+# loop through each game tag and for each game, get the data per
+# videogame_attrs and store in a dictionary and then at the end,
+# store in the rows list.
+for game in root_xml.findall('Game'):
+	data = &#91;] # store game data
+	# loop through each attribute
+	for field in videogame_attrs:
+		if game is not None and game.find(field) is not None:
+			data.append(game.find(field).text) # append the data
+		else:
+			data.append(None) # data not found, just set to None
+	rows.append({videogame_attrs&#91;i]: data&#91;i] # put the game data in the list
+			  for i in range(0, len(videogame_attrs))})
+
+# Take all the games and their data and put in a dataset/dataframe
+games = pd.DataFrame(rows, columns = videogame_attrs)
+</code></pre>
+</div></div>
+
+
+
+<p>The variable &#8216;games&#8217; contains the DataFrame of all video games in the Launchbox-app database.</p>
+
+
+
+<h2>Cleaning the Data</h2>
+
+
+
+<p></p>
+
+
+
+<p>With the data in a dataframe, it is much easier to analyze and clean and alter.</p>
+
+
+
+<p>The &#8216;ReleaseDate&#8217; column has the date and time and just like the previous post of video game consoles, i&#8217;ll be removing the time and keeping the date.</p>
+
+
+
+<p>I also formatted the dates to a certain date format for sorting purposes.</p>
+
+
+
+<pre class="wp-block-code"><code># There are time/timezones in the 'ReleaseDate' column starting with 'T'
+# remove them and just keep the data
+dates = &#91;re.sub("T.*", "", date)
+		 if date is not None else None
+		 for date in games&#91;"ReleaseDate"]]
+games&#91;"ReleaseDate"] = dates
+
+# format the Date as well for sorting purposes
+dates = &#91;datetime.strptime(date, "%Y-%m-%d") 
+		 if date is not None else None
+		 for date in dates]
+
+# save dataframe in a csv file
+games.to_csv("games.csv", index=False)</code></pre>
+
+
+
+<p>I also saved the dataset as a CSV file in case you want to analyze the data for yourself.</p>
+
+
+
+<h2>Running Video Game Queries</h2>
+
+
+
+<p><a href="http://34.193.228.138/wp-admin/edit.php?post_type=post"></a></p>
+
+
+
+<p>Well, if you read this far, congrats. No really <img src="https://s.w.org/images/core/emoji/13.1.0/72x72/1f642.png" alt="🙂" class="wp-smiley" style="height: 1em; max-height: 1em;" /></p>
+
+
+
+<p>With our new found data, let&#8217;s get some answers on video games.</p>
+
+
+
+<h3>Give me all the Mega Man video games ever made</h3>
+
+
+
+<p></p>
+
+
+
+<p>You know Mega Man? You know, the &#8216;Blue Bomber&#8217;? The super fighting robot, fighting to save the world from the evil robot master Dr. Wily?? (Cue the Mega Man 1990&#8217;s animated theme song or your own personal Mega Man soundtrack)</p>
+
+
+
+<p>Mega Man is a popular run-and-gun video game franchise that&#8217;s been around for decades.</p>
+
+
+
+<p>Let&#8217;s see which MegaMan games existed:</p>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="957" height="440" src="http://34.193.228.138/wp-content/uploads/2020/12/MegaMan-Query.png" alt="" class="wp-image-526" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/12/MegaMan-Query.png 957w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/12/MegaMan-Query-300x138.png 300w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/12/MegaMan-Query-768x353.png 768w" sizes="(max-width: 957px) 100vw, 957px" /></figure>
+
+
+
+<p>Well that is a lot of running and gunning and a lot of robot masters defeated <img src="https://s.w.org/images/core/emoji/13.1.0/72x72/1f642.png" alt="🙂" class="wp-smiley" style="height: 1em; max-height: 1em;" /></p>
+
+
+
+<h3>What were the last few games created for the Sega Genesis console?</h3>
+
+
+
+<p></p>
+
+
+
+<p>Where are all my SEGA lovers at? Who is old enough to remember the Sega and Nintendo console war?</p>
+
+
+
+<p>So the below query is to see which were the final games of the SEGA Genesis before it was decommissioned.</p>
+
+
+
+<p>Several online sources will say &#8220;Frogger&#8221; was the last game for the SEGA Genesis while the LaunchBox-app.com site has &#8220;Duke Nukem 3D&#8221; as the last game released.</p>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="985" height="790" src="http://34.193.228.138/wp-content/uploads/2020/12/sega_games.png" alt="" class="wp-image-535" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/12/sega_games.png 985w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/12/sega_games-300x241.png 300w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/12/sega_games-768x616.png 768w" sizes="(max-width: 985px) 100vw, 985px" /></figure>
+
+
+
+<p>&#8220;It&#8217;s time to kick a** and chew bubble gum. And I&#8217;m all out of gum.&#8221;</p>
+
+
+
+<p>Yeah&#8230;I&#8217;ll just stick to my day job lol</p>
+
+
+
+<h3>How many Nintendo video games are out there? How many PlayStation games out there?</h3>
+
+
+
+<p></p>
+
+
+
+<p>Say no more gamers. I got you covered.</p>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="988" height="678" src="http://34.193.228.138/wp-content/uploads/2020/12/n_games.png" alt="" class="wp-image-536" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/12/n_games.png 988w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/12/n_games-300x206.png 300w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/12/n_games-768x527.png 768w" sizes="(max-width: 988px) 100vw, 988px" /></figure>
+
+
+
+<h3>Last one: A bar plot on number of games created by year</h3>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="761" height="709" src="http://34.193.228.138/wp-content/uploads/2020/12/plot_number_of_games.png" alt="" class="wp-image-537" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/12/plot_number_of_games.png 761w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/12/plot_number_of_games-300x280.png 300w" sizes="(max-width: 761px) 100vw, 761px" /></figure>
+
+
+
+<p>Looks like the first 25 years games were created at a exponential rate and growing followed by some declines and peaks.</p>
+
+
+
+<p>Also note that not many games were not made in 2020. This could have been due to the economic slowdown we had and/or the COVID-19 pandemic.</p>
+
+
+
+<h2>Summary</h2>
+
+
+
+<p></p>
+
+
+
+<p>I had so much fun working on this data set <img src="https://s.w.org/images/core/emoji/13.1.0/72x72/1f642.png" alt="🙂" class="wp-smiley" style="height: 1em; max-height: 1em;" /> I can spend hours learning about video games new and old. I hope you enjoyed this blog post and how to extract video game data and gain and answer questions and gain insight. This data set is much larger than the previous post I used. As that is the case, you have a lot more data to play around with and many questions about the data can be looked into.</p>
+
+
+
+<p>What other questions would you like me to answer given the data? Let me know your thoughts and comment what you would like.</p>
+
+
+
+<p>Link to source code and the CSV (comma seperated value) file for the data can be found here:</p>
+
+
+
+<p><a href="https://github.com/thatdatascienceguy/thatdatascienceguyblog/tree/master/VideoGameData">https://github.com/thatdatascie</a><a href="https://github.com/thatdatascienceguy/thatdatascienceguyblog/tree/master/VideoGameData" target="_blank" rel="noreferrer noopener">nceguy/thatdatascienceguyblog/tree/master/VideoGameData</a></p>
+
+
+
+<p>The CSV file for video game is called &#8216;games.csv&#8217;. You can use software such as Excel or notepad to open this kind of file if you&#8217;re interested.</p>
+
+
+
+<p>For those who love working with databases and know SQL, I have two .db files &#8216;Video_Game_Platforms_DB.db&#8217; and &#8216;Video_Games_DB.db&#8217; which have database tables for video game platforms and video games respectively.</p>
+
+
+
+<p>Lastly, I want to give a big thanks and shout out to LaunchBox for providing me the data to show you guys. This blog post and the previous one would not have been possible if it weren&#8217;t for them.</p>
+
+
+
+<p>Take care and stay safe! <img src="https://s.w.org/images/core/emoji/13.1.0/72x72/1f642.png" alt="🙂" class="wp-smiley" style="height: 1em; max-height: 1em;" /></p>
+]]></content:encoded>
+					
+					<wfw:commentRss>https://thatdatascienceguy.github.io/data-science-blog/2020/12/03/extracting-launchboxs-video-game-metadata-part-2-getting-data-of-video-games/feed/</wfw:commentRss>
+			<slash:comments>0</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>Extracting LaunchBox&#8217;s Video Game Metadata: Getting Data of Video Game Consoles</title>
+		<link>https://thatdatascienceguy.github.io/data-science-blog/2020/11/12/extracting-launchboxs-video-game-metadata-getting-data-of-video-game-consoles/</link>
+					<comments>https://thatdatascienceguy.github.io/data-science-blog/2020/11/12/extracting-launchboxs-video-game-metadata-getting-data-of-video-game-consoles/#respond</comments>
+		
+		<dc:creator><![CDATA[thatdatascienceguy]]></dc:creator>
+		<pubDate>Thu, 12 Nov 2020 18:13:47 +0000</pubDate>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[data science]]></category>
+		<category><![CDATA[launchbox]]></category>
+		<category><![CDATA[launchbox-app]]></category>
+		<category><![CDATA[thatdatascienceguy]]></category>
+		<category><![CDATA[videogameconsoles]]></category>
+		<category><![CDATA[videogames]]></category>
+		<guid isPermaLink="false">http://34.193.228.138/?p=424</guid>
+
+					<description><![CDATA[Hello world!!! Where are all my gamers new and old at?! Anyone hyped up for the PlayStation 5?? Love video&#8230;]]></description>
+										<content:encoded><![CDATA[
+<p>Hello world!!!</p>
+
+
+
+<p>Where are all my gamers new and old at?!</p>
+
+
+
+<p>Anyone hyped up for the PlayStation 5??</p>
+
+
+
+<p>Love video games and coding?</p>
+
+
+
+<p>Well, if you said yes to any one of those, I am here to let you know that I was able to get metadata from LaunchBox (<a href="https://www.launchbox-app.com/" target="_blank" rel="noreferrer noopener">https://www.launchbox-app.com/</a>) of their video games database.</p>
+
+
+
+<p>I was always interested in having my own internal database of video games for my own analysis. I always wanted to know how many video games existed, how many platforms are out there and so on.</p>
+
+
+
+<p>This blog post is about me extracting the list of video game platforms from LaunchBox&#8217;s XML metadata. </p>
+
+
+
+<h2>Looking at the Data</h2>
+
+
+
+<p></p>
+
+
+
+<p>The zip file that was given to me by Launchbox has several XML files. One of them is a file containing all the platforms that Launchbox has in their records.</p>
+
+
+
+<p>Here is some of that data as an example:</p>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="1024" height="558" src="http://34.193.228.138/wp-content/uploads/2020/11/Screenshot-from-2020-11-11-16-24-03-1024x558.png" alt="" class="wp-image-433" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-11-16-24-03-1024x558.png 1024w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-11-16-24-03-300x164.png 300w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-11-16-24-03-768x419.png 768w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-11-16-24-03-1536x838.png 1536w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-11-16-24-03-1600x872.png 1600w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-11-16-24-03-1320x720.png 1320w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-11-16-24-03.png 1823w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+
+
+
+<p>The platforms that are listed on this file also have other tags in them that define some specs on the platform such as name, CPU, description, release date and so on.</p>
+
+
+
+<p>My goal was to take this data and convert it to a DataFrame (a table of rows and columns) where each row represents a console and the columns are the attributes of that console. Putting it in this format helps for better readability and analysis.</p>
+
+
+
+<p>The steps were as follows:</p>
+
+
+
+<ul><li>Read the XML file of video game platforms</li><li>For each platform, extract certain attributes and store them in a DataFrame.</li><li>Take the DataFrame and write it to a CSV file.</li></ul>
+
+
+
+<h2>Getting the Data</h2>
+
+
+
+<p></p>
+
+
+
+<p>I used python to simply read in the XML file as follows:</p>
+
+
+
+<pre class="wp-block-code"><code>import xml.etree.ElementTree as ET
+import pandas as pd
+import re
+
+# read in the data
+platforms_xml = ET.parse('Platforms.xml')
+root_xml = platforms_xml.getroot()</code></pre>
+
+
+
+<p>Once we have the root or starting point of the XML tree, next step is to for each platform tag, read in each of the attributes:</p>
+
+
+
+<ul><li>Name</li><li>Emulated</li><li>Release Date</li><li>Developer</li><li>Manufacturer</li><li>CPU</li><li>Memory</li><li>Graphics</li><li>Sound</li><li>Display</li><li>Media</li><li>Maximum Controllers</li><li>Notes</li><li>Category</li></ul>
+
+
+
+<pre class="wp-block-code"><code># Create Empty list to store attributes
+platform_attrs = &#91;"Name", "Emulated", "ReleaseDate", "Developer",
+	 "Manufacturer", "Cpu", "Memory", "Graphics", "Sound",
+	 "Display", "Media", "MaxControllers", "Notes", "Category"]
+
+# list to store all the data to be converted to CSV
+rows = &#91;]
+
+for platform in root_xml:
+	data = &#91;]
+	# Check if any of them are null and if so, set the value to 'None'
+	for field in platform_attrs:
+		if platform is not None and platform.find(field) is not None:
+			data.append(platform.find(field).text) # add the data
+		else: # it is a empty value set to None
+			data.append(None)
+	# append the data/observation to the rows list
+	rows.append({platform_attrs&#91;i]: data&#91;i]
+			  for i in range(0,len(platform_attrs))})</code></pre>
+
+
+
+<h2>Taking the Data Extracted from the XML File and Putting it in a DataFrame</h2>
+
+
+
+<p></p>
+
+
+
+<p>The code below shows how to convert the extracted data to a data frame</p>
+
+
+
+<pre class="wp-block-code"><code># Crate a dataframe out of the extracted data from the xml file
+platforms = pd.DataFrame(rows, columns = platform_attrs)</code></pre>
+
+
+
+<p>Only 2 things I wanted to clean in the dataset was to remove the time in the &#8220;ReleaseDate&#8221; field and just keep the date. I didn&#8217;t feel it was necessary to know what actual time the console was released.</p>
+
+
+
+<pre class="wp-block-code"><code># looking around the csv file, there are time/timezones in the date as well.
+# let's remove the time and keep the date
+dates = &#91;re.sub("T.*", "", date)
+		 if date is not None else None
+		 for date in platforms&#91;"ReleaseDate"]]
+
+platforms&#91;"ReleaseDate"] = dates</code></pre>
+
+
+
+<h2>Querying the Data</h2>
+
+
+
+<p></p>
+
+
+
+<p>After all that work, I was curious on a few questions like</p>
+
+
+
+<ol><li>How many Nintendo consoles have been made and when?</li><li>What are the specs of each Sony console?</li><li>Which consoles were using floppy disks and when did they start fading out? </li></ol>
+
+
+
+<p>First question can be answered by searching for &#8220;Nintendo&#8221; in the nName column and outputting the name and release date and sort it by &#8220;ReleaseDate&#8221;.</p>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="767" height="573" src="http://34.193.228.138/wp-content/uploads/2020/11/Screenshot-from-2020-11-12-11-39-56.png" alt="" class="wp-image-484" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-12-11-39-56.png 767w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-12-11-39-56-300x224.png 300w" sizes="(max-width: 767px) 100vw, 767px" /></figure>
+
+
+
+<p>The second question can be answered similar to the previous question except, search for &#8220;Sony&#8221; instead. Then list the name, CPU, memory, graphics and, display.</p>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="993" height="437" src="http://34.193.228.138/wp-content/uploads/2020/11/Screenshot-from-2020-11-12-11-49-14.png" alt="" class="wp-image-487" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-12-11-49-14.png 993w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-12-11-49-14-300x132.png 300w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-12-11-49-14-768x338.png 768w" sizes="(max-width: 993px) 100vw, 993px" /></figure>
+
+
+
+<p>The answer to the last one is just search for &#8220;floppy&#8221; in the &#8220;Media&#8221; column and display the Name, release date and, media used.</p>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="813" height="866" src="http://34.193.228.138/wp-content/uploads/2020/11/Screenshot-from-2020-11-12-11-51-50.png" alt="" class="wp-image-488" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-12-11-51-50.png 813w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-12-11-51-50-282x300.png 282w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/11/Screenshot-from-2020-11-12-11-51-50-768x818.png 768w" sizes="(max-width: 813px) 100vw, 813px" /></figure>
+
+
+
+<p>Anyone got a case of nostalgia looking at the floppy disk results? <img src="https://s.w.org/images/core/emoji/13.1.0/72x72/1f642.png" alt="🙂" class="wp-smiley" style="height: 1em; max-height: 1em;" /></p>
+
+
+
+<h2>Summary</h2>
+
+
+
+<p></p>
+
+
+
+<p>I have shown you how I took XML data courtesy of LaunchBox and using programming and logic, convert it to a DataFrame and reveal insights about the data. I love to let the data speak for itself. <img src="https://s.w.org/images/core/emoji/13.1.0/72x72/1f642.png" alt="🙂" class="wp-smiley" style="height: 1em; max-height: 1em;" /></p>
+
+
+
+<p>What over queries can you come up with this data? I would love to hear your feedback.</p>
+
+
+
+<p>Hope you enjoyed reading this blog post and links to the data and code can be found here:</p>
+
+
+
+<p><a href="https://github.com/thatdatascienceguy/thatdatascienceguyblog/tree/master/VideoGameData">https://github.com/thatdatascienceguy/thatdatascienceguyblog/tree/master/VideoGameData</a></p>
+
+
+
+<p>On that link, you can also download the .zip file of the Metadata that I used for this blog.</p>
+
+
+
+<p>I also made a .csv (Comma Separated Value) file which you can open with any text editor or spreadsheet software of your choice.</p>
+
+
+
+<h3><strong>***Coming Soon: blog post of video games of every console from LaunchBox!!!***</strong></h3>
+]]></content:encoded>
+					
+					<wfw:commentRss>https://thatdatascienceguy.github.io/data-science-blog/2020/11/12/extracting-launchboxs-video-game-metadata-getting-data-of-video-game-consoles/feed/</wfw:commentRss>
+			<slash:comments>0</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>Web App for Viewing Baby Names in the U.S Over Time</title>
+		<link>https://thatdatascienceguy.github.io/data-science-blog/2020/08/07/web-app-for-viewing-baby-names-in-the-u-s-over-time/</link>
+					<comments>https://thatdatascienceguy.github.io/data-science-blog/2020/08/07/web-app-for-viewing-baby-names-in-the-u-s-over-time/#respond</comments>
+		
+		<dc:creator><![CDATA[thatdatascienceguy]]></dc:creator>
+		<pubDate>Fri, 07 Aug 2020 01:05:05 +0000</pubDate>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[baby names]]></category>
+		<category><![CDATA[babynames]]></category>
+		<category><![CDATA[data science]]></category>
+		<category><![CDATA[R]]></category>
+		<category><![CDATA[shiny]]></category>
+		<category><![CDATA[shinyapp]]></category>
+		<category><![CDATA[thatdatascienceguy]]></category>
+		<category><![CDATA[web app]]></category>
+		<guid isPermaLink="false">http://34.193.228.138/?p=366</guid>
+
+					<description><![CDATA[Hello World! Ever dreamed of what to name your future children or curious how popular a particular name is? Love&#8230;]]></description>
+										<content:encoded><![CDATA[
+<p>Hello World!</p>
+
+
+
+<p>Ever dreamed of what to name your future children or curious how popular a particular name is? Love interactive web apps?</p>
+
+
+
+<p><strong>Well say no more!</strong></p>
+
+
+
+<p>That Data Science Guy here and this blog post will be based on a web app I made using R Shiny. The web app allows you to type in a name and gender and see how many babies were born from 1880-2018 via bar plot. </p>
+
+
+
+<p>When using the app, always type the name of the person with the first letter capitalized. Otherwise, you might get a empty result.</p>
+
+
+
+<p>With that said, check it out! Type in some names, have fun and you just might find some interesting results and trends! <img src="https://s.w.org/images/core/emoji/13.1.0/72x72/1f642.png" alt="🙂" class="wp-smiley" style="height: 1em; max-height: 1em;" /></p>
+
+
+
+<figure><iframe loading="lazy" width="110%" height="700px" src="https://thatdatascienceguy.shinyapps.io/BabyNamesApp/" allowfullscreen="allowfullscreen"></iframe></figure>
+
+
+
+<p>The data comes from &#8216;babynames&#8217; package in the programming language R. This dataset has a list of baby names of people born in the United States from 1880 to 2018 and comes from the United States SSA (Social Security Administration).</p>
+
+
+
+<p><strong>*** Please note for safety reasons, names that were used less than 5 times are omitted.***</strong></p>
+
+
+
+<p>Hope you enjoyed my web app and hope you learned something new!!</p>
+
+
+
+<p>Github link to source code: <a href="https://github.com/thatdatascienceguy/thatdatascienceguyblog/tree/master/BabyNameApp">https://github.com/thatdatascienceguy/thatdatascienceguyblog/tree/master/BabyNameApp</a></p>
+
+
+
+<p>Link directly to the web app <a href="https://thatdatascienceguy.shinyapps.io/BabyNamesApp/?_ga=2.267556750.1211023990.1596757838-1890682427.1596757838" target="_blank" rel="noreferrer noopener">here</a></p>
+]]></content:encoded>
+					
+					<wfw:commentRss>https://thatdatascienceguy.github.io/data-science-blog/2020/08/07/web-app-for-viewing-baby-names-in-the-u-s-over-time/feed/</wfw:commentRss>
+			<slash:comments>0</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>Looking at Baseball Statistics From the Sean Lahman Database</title>
+		<link>https://thatdatascienceguy.github.io/data-science-blog/2020/07/16/looking-at-baseball-statistics-from-the-sean-lahman-database/</link>
+					<comments>https://thatdatascienceguy.github.io/data-science-blog/2020/07/16/looking-at-baseball-statistics-from-the-sean-lahman-database/#respond</comments>
+		
+		<dc:creator><![CDATA[thatdatascienceguy]]></dc:creator>
+		<pubDate>Thu, 16 Jul 2020 15:12:56 +0000</pubDate>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[baseball]]></category>
+		<category><![CDATA[lahman]]></category>
+		<category><![CDATA[MLB]]></category>
+		<category><![CDATA[R]]></category>
+		<category><![CDATA[seanlahman]]></category>
+		<category><![CDATA[shiny]]></category>
+		<category><![CDATA[shinyapp]]></category>
+		<guid isPermaLink="false">http://34.193.228.138/?p=344</guid>
+
+					<description><![CDATA[Hello world! Time to play ball!!! 🙂 I was looking into baseball statistics and always wanted to look into baseball&#8230;]]></description>
+										<content:encoded><![CDATA[
+<div class="wp-block-image"><figure class="aligncenter size-large is-resized"><img loading="lazy" src="http://34.193.228.138/wp-content/uploads/2020/07/green-ball-on-sand-257970-1024x683.jpg" alt="" class="wp-image-360" width="439" height="292" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/green-ball-on-sand-257970-1024x683.jpg 1024w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/green-ball-on-sand-257970-300x200.jpg 300w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/green-ball-on-sand-257970-768x512.jpg 768w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/green-ball-on-sand-257970-1536x1024.jpg 1536w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/green-ball-on-sand-257970-2048x1365.jpg 2048w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/green-ball-on-sand-257970-1600x1067.jpg 1600w" sizes="(max-width: 439px) 100vw, 439px" /><figcaption><a href="https://www.pexels.com/photo/green-ball-on-sand-257970/">https://www.pexels.com/photo/green-ball-on-sand-257970/</a></figcaption></figure></div>
+
+
+
+<p>Hello world! Time to play ball!!! <img src="https://s.w.org/images/core/emoji/13.1.0/72x72/1f642.png" alt="🙂" class="wp-smiley" style="height: 1em; max-height: 1em;" /></p>
+
+
+
+<p>I was looking into baseball statistics and always wanted to look into baseball statistics especially historical data. Baseball is not only considered by some to be America&#8217;s pastime, but also one of the most statistical sports in the world. </p>
+
+
+
+<p>I came across the Lahman Baseball database: <a href="http://www.seanlahman.com/baseball-archive/statistics/">http://www.seanlahman.com/baseball-archive/statistics/</a> created by Author and Journalist Sean Lahman which has MLB records of baseball games dating all the way back to 1871. I decided to use the statistical programming language R and Shiny, a R package which one can create interactive web apps.</p>
+
+
+
+<p>The app below allows you to enter a baseball player&#8217;s first and last name and what kind of data you want to look at. Data is available from 1871 up to 2019. (post season is not included) Available options are</p>
+
+
+
+<ul><li>fielding</li><li>batting</li><li>pitching</li></ul>
+
+
+
+<p>For each choice you select, you&#8217;ll see the selected baseball player&#8217;s stats at the bottom. </p>
+
+
+
+<p>Also, for each position you select, you can also select the statistic you want to plot. This will create a bar plot of year vs the statistic you selected.</p>
+
+
+
+<p>Check out the app! Learn about baseball player stats and how they were throughout their career. If you want to have baseball conversations and/or debates, pull up this app; it&#8217;ll definitely be something to talk about and share with other people.</p>
+
+
+
+<p>Last but not least, I want to give a big thanks and shout out to the man himself Sean Lahman for making this data available and free to download. I would not have been able to make the app if it wasn&#8217;t for him and his work. Thanks Sean.</p>
+
+
+
+<iframe loading="lazy" width="100%" height="700px" src="https://thatdatascienceguy.shinyapps.io/BaseballApp/" allowfullscreen="allowfullscreen">
+</iframe>
+
+
+
+<p><strong>Please note that the app will disconnect if you are not using if after about 15 minutes. Refresh your browser and the app should come up.</strong></p>
+
+
+
+<p>Github source code for the app: <a href="https://github.com/thatdatascienceguy/thatdatascienceguyblog/tree/master/BaseballApp">https://github.com/thatdatascienceguy/thatdatascienceguyblog/tree/master/BaseballApp</a></p>
+
+
+
+<p>shinyapps.io link to the application itself: <a href="https://thatdatascienceguy.shinyapps.io/BaseballApp/">https://thatdatascienceguy.shinyapps.io/BaseballApp/</a></p>
+]]></content:encoded>
+					
+					<wfw:commentRss>https://thatdatascienceguy.github.io/data-science-blog/2020/07/16/looking-at-baseball-statistics-from-the-sean-lahman-database/feed/</wfw:commentRss>
+			<slash:comments>0</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>Analyzing Powerlifting Data</title>
+		<link>https://thatdatascienceguy.github.io/data-science-blog/2020/07/13/analyzing-powerlifting-data/</link>
+					<comments>https://thatdatascienceguy.github.io/data-science-blog/2020/07/13/analyzing-powerlifting-data/#respond</comments>
+		
+		<dc:creator><![CDATA[thatdatascienceguy]]></dc:creator>
+		<pubDate>Mon, 13 Jul 2020 21:15:36 +0000</pubDate>
+				<category><![CDATA[Uncategorized]]></category>
+		<guid isPermaLink="false">http://34.193.228.138/?p=31</guid>
+
+					<description><![CDATA[Powerlifting is the sport where people compete to see who can lift the most in terms of bench press, squats&#8230;]]></description>
+										<content:encoded><![CDATA[
+<figure class="wp-block-image is-resized"><img loading="lazy" src="http://52.201.113.190/wp-content/uploads/2019/01/powerlifting_PNG26.png" alt="" class="wp-image-188" width="512" height="304" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2019/01/powerlifting_PNG26.png 800w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2019/01/powerlifting_PNG26-300x179.png 300w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2019/01/powerlifting_PNG26-768x458.png 768w" sizes="(max-width: 512px) 100vw, 512px" /><figcaption><a href="https://clipartstation.com/bench-press-clipart/">https://clipartstation.com/bench-press-clipart/</a></figcaption></figure>
+
+
+
+<p>Powerlifting is the sport where people compete to see who can lift the most in terms of bench press, squats and, deadlifts. Many people compete in these competitions to display their strength and work and train hard to get their bodies in shape for these events.  </p>
+
+
+
+<p>For this post, I will be writing about 2 topics:</p>
+
+
+
+<ul><li>Looking at how much lifters lift in terms of bench press, squats and, deadlifts per gender.</li><li>See which competitions these countries are located that have the most disqualified lifters via a geo-scatter plot. </li></ul>
+
+
+
+<p>I found a dataset on <a href="https://openpowerlifting.org/data">https://openpowerlifting.org/data</a> that shows data about lifters and includes attributes like, name, age, weight, date, amount lifted, score and location of meet. </p>
+
+
+
+<p>Let&#8217;s code away and create some plots that show how much people lift between genders.</p>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="885" height="466" src="http://34.193.228.138/wp-content/uploads/2020/07/image-8.png" alt="" class="wp-image-330" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/image-8.png 885w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/image-8-300x158.png 300w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/image-8-768x404.png 768w" sizes="(max-width: 885px) 100vw, 885px" /></figure>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="420" height="344" src="http://34.193.228.138/wp-content/uploads/2020/07/image-9.png" alt="" class="wp-image-331" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/image-9.png 420w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/image-9-300x246.png 300w" sizes="(max-width: 420px) 100vw, 420px" /></figure>
+
+
+
+<h3>Visualizing Lift Attempts Between Male and Females</h3>
+
+
+
+<p>Even though there are 3 different genders in the dataset, the mixed gender (Mx) is barely visible in the barplot. If we look closely at the data and select only powerlifters that are gender-neutral, there are only 13 of them.</p>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="737" height="110" src="http://34.193.228.138/wp-content/uploads/2020/07/image-10.png" alt="" class="wp-image-333" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/image-10.png 737w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/image-10-300x45.png 300w" sizes="(max-width: 737px) 100vw, 737px" /></figure>
+
+
+
+<p>As there are much more men and women then gender-neural competitors, we won&#8217;t include them in the plot only (otherwise it will look like as if there aren&#8217;t any which can be misleading)</p>
+
+
+
+<p>Plots for male and female lifters for 3 attempts of bench press, squats and, deadlifts are below:</p>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="742" height="727" src="http://34.193.228.138/wp-content/uploads/2020/07/image-11.png" alt="" class="wp-image-334" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/image-11.png 742w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/image-11-300x294.png 300w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/image-11-45x45.png 45w" sizes="(max-width: 742px) 100vw, 742px" /></figure>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="357" height="676" src="http://34.193.228.138/wp-content/uploads/2020/07/image-12.png" alt="" class="wp-image-335" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/image-12.png 357w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/image-12-158x300.png 158w" sizes="(max-width: 357px) 100vw, 357px" /></figure>
+
+
+
+<figure class="wp-block-image size-large"><img loading="lazy" width="360" height="684" src="http://34.193.228.138/wp-content/uploads/2020/07/image-13.png" alt="" class="wp-image-336" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/image-13.png 360w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2020/07/image-13-158x300.png 158w" sizes="(max-width: 360px) 100vw, 360px" /></figure>
+
+
+
+<p>What is interesting is that there are many failed attempts for both genders and made me wonder where are these people getting disqualified at?</p>
+
+
+
+<h3>Where In the World are Lifters Being Disqualified at?</h3>
+
+
+
+<p>While looking at the plots on best attempts on different exercises, I noticed that there were negative values which means either the lifter was disqualified or a failed attempt.</p>
+
+
+
+<p>It made me ponder which countries where these meets are held do people get disqualified the most. As such, I decided to create a scatter geo plot showing these locations.</p>
+
+
+
+<p>The approach was</p>
+
+
+
+<ul><li>Filter the data to only have lifters who were disqualified.</li><li>Calculate the number of lifters disqualified per meet country.</li><li>Add a ISO alpha 3 code to the data for the purpose of creating the scatter geo plot. To know more about ISO alpha 3 country codes, click <a rel="noreferrer noopener" href="https://www.iban.com/country-codes" target="_blank">here</a>.</li><li>Use the programming python&#8217;s plotly package to create the plot.</li></ul>
+
+
+
+<p>Below is a scatter geo plot where you can see which meet locations are lifters getting disqualified. Here you can zoom in and out and pan across the globe and see countries of disqualified lifters. The bigger the &#8216;bubble&#8217;, the more disqualified lifters are.</p>
+
+
+
+<p>Have fun, experiment and you might be surprised of the results!</p>
+
+
+
+<iframe loading="lazy" width="900" height="800" frameborder="0" scrolling="no" src="//plotly.com/~thatdatascienceguy/3.embed"></iframe>
+
+
+
+<p>Thank you for checking out my blog post! Hopefully I&#8217;ve piqued your interest in powerlifting and data analytics. Feel free to comment on the blog if you like. Any feedback is greatly appreciated.</p>
+
+
+
+<p>Link to my github repository of all the code used for this blog: <a href="https://github.com/thatdatascienceguy/thatdatascienceguyblog/tree/master/powerlifting"><a href="https://github.com/thatdatascienceguy/thatdatascienceguyblog/tree/master/powerlifting">https://github.com/thatdatascienceguy/thatdatascienceguyblog/tree/master/powerlifting</a></a></p>
+
+
+
+<pre class="wp-block-preformatted">This page uses data from the OpenPowerlifting project, https://www.openpowerlifting.org./
+    You may download a copy of the data at https://gitlab.com/openpowerlifting/opl-data</pre>
+
+
+
+<p></p>
+]]></content:encoded>
+					
+					<wfw:commentRss>https://thatdatascienceguy.github.io/data-science-blog/2020/07/13/analyzing-powerlifting-data/feed/</wfw:commentRss>
+			<slash:comments>0</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>Digging through Jeopardy! Questions using Python and Natural Language Processing</title>
+		<link>https://thatdatascienceguy.github.io/data-science-blog/2019/01/25/jeopardy-analysis/</link>
+					<comments>https://thatdatascienceguy.github.io/data-science-blog/2019/01/25/jeopardy-analysis/#respond</comments>
+		
+		<dc:creator><![CDATA[thatdatascienceguy]]></dc:creator>
+		<pubDate>Fri, 25 Jan 2019 04:32:46 +0000</pubDate>
+				<category><![CDATA[Uncategorized]]></category>
+		<guid isPermaLink="false">http://34.193.228.138/?p=169</guid>
+
+					<description><![CDATA[While taking a Web Analytics course, my class had to find a corpus of text to analyze and find the&#8230;]]></description>
+										<content:encoded><![CDATA[
+				
+<div class="wp-block-image"><figure class="aligncenter"><a href="https://www.google.com/url?sa=i&amp;source=images&amp;cd=&amp;cad=rja&amp;uact=8&amp;ved=2ahUKEwipk-_Y5oLgAhUQh-AKHV9gBKQQjRx6BAgBEAU&amp;url=%2Furl%3Fsa%3Di%26source%3Dimages%26cd%3D%26ved%3D2ahUKEwipk-_Y5oLgAhUQh-AKHV9gBKQQjRx6BAgBEAU%26url%3D%252Furl%253Fsa%253Di%2526source%253Dimages%2526cd%253D%2526cad%253Drja%2526uact%253D8%2526ved%253D2ahUKEwipk-_Y5oLgAhUQh-AKHV9gBKQQjRx6BAgBEAU%2526url%253Dhttps%25253A%25252F%25252Fwww.thoughtco.com%25252Fjeopardy-past-and-present-history-1396954%2526psig%253DAOvVaw1iRxr38lRnXxmOCXhvqK-r%2526ust%253D1548295047471188%26psig%3DAOvVaw1iRxr38lRnXxmOCXhvqK-r%26ust%3D1548295047471188&amp;psig=AOvVaw1iRxr38lRnXxmOCXhvqK-r&amp;ust=1548295047471188"><img loading="lazy" width="768" height="432" src="http://52.201.113.190/wp-content/uploads/2019/01/jeopardy-1.jpg" alt="" class="wp-image-37" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2019/01/jeopardy-1.jpg 768w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2019/01/jeopardy-1-300x169.jpg 300w" sizes="(max-width: 768px) 100vw, 768px" /></a><figcaption>Image: https://www.thoughtco.com/jeopardy-past-and-present-history-1396954</figcaption></figure></div>
+
+
+
+<p>While taking a Web Analytics course, my class had to find a corpus of text to analyze and find the most common words. After doing some digging, I came across an interesting dataset: list of Jeopardy! questions. A reddit user had posted a link to a dataset of over 200k+ Jeopardy! questions asked throughout the show&#8217;s history.</p>
+
+
+
+<p>Link to the reddit post: <a href="https://www.reddit.com/r/datasets/comments/1uyd0t/200000_jeopardy_questions_in_a_json_file/" target="_blank" rel="noreferrer noopener" aria-label="https://www.reddit.com/r/datasets/comments/1uyd0t/200000_jeopardy_questions_in_a_json_file/ (opens in a new tab)">https://www.reddit.com/r/datasets/comments/1uyd0t/200000_jeopardy_questions_in_a_json_file/</a></p>
+
+
+
+<p>I decided to work with this dataset as I too was curious on the kinds of questions that appear on the show. I could imagine the text processing I wanted to do was similar (hopefully) to how IBM&#8217;s Watson analyzed questions.  Eager and excited, I began coding away.</p>
+
+
+
+<p>The programming language Python has libraries and functions to use to work with text and is one of my favorite programming languages (Python FTW!!!) I definitely recommended learning how to code and Python is definitely a fun and easy language to get started with in my opinion. </p>
+
+
+
+<p>Before I get carried away talking away how wonderful the language is, my approach was as follows:</p>
+
+
+
+<ul><li>For this assignment, and to make things easier, consider only words with 2 or more letters with no digits and special characters allowed.</li><li>Load libraries to extract the dataset and use Natural Language Processing functions.</li><li>Take every question in the dataset and join it as one big string by spaces</li><li>Tokenize the string</li><li>Set every word to lowercase (in NLP, this is called normalizing). This also helps as when doing word counts, I don&#8217;t want to consider for example &#8216;Country&#8217; and &#8216;country&#8217; differently. </li><li>Use regular expressions to filter out the corpus of text based on my first bullet point.</li><li>Print out the top 100 most common words and their frequency and finally make a plot of them.</li></ul>
+
+
+
+<p>Loading the dataset and the required libraries/packages</p>
+
+
+<pre class="brush: python; title: ; notranslate"> 
+import pandas as pd 
+import nltk
+import re
+import enchant
+import matplotlib.pyplot as plt
+
+# read in the dataset and print how many questions there are 
+jeopardy = pd.read_json(&quot;JEOPARDY_QUESTIONS1.json&quot;)
+</pre>
+
+
+
+<p>Combine all the questions as one giant corpus of questions (one big string)</p>
+
+
+<pre class="brush: python; title: ; notranslate">
+d = enchant.Dict(&quot;en_US&quot;)
+# join the list of strings into one
+corpus = &quot; &quot;.join(questions)
+tokens = nltk.word_tokenize(corpus) # tokenize the string
+</pre>
+
+
+
+<p>Normalize the words in the corpus and store the number of words</p>
+
+
+<pre class="brush: python; title: ; notranslate">
+words = [w.lower() for w in tokens]
+</pre>
+
+
+
+<p>Using the rule to only allow 2 letter words or more and filter out numbers and characters and any words that are not in the English dictionary, we get a much smaller number to work with:</p>
+
+
+<pre class="brush: python; title: ; notranslate">
+words_only = [w for w in words if re.search(r&quot;^[a-z]{1,}[^\W|\d]+$&quot;,w)]
+words_only = [w for w in words_only if d.check(w)] 
+# only if valid in the English Language
+
+n_unique_words = len(set(words_only)) 
+print &quot;Number of unique words: &quot;, n_unique_words
+</pre>
+<p>Number of unique words:  37824</p>
+
+
+
+<p>So in over 28 years of Jeopardy! questions, there are about 38000 unique words that appear in the corpus.</p>
+
+
+
+<p>Let&#8217;s now see the frequency distribution of these words in the text and see the most popular words.</p>
+
+
+
+<p>Python&#8217;s nltk <a rel="noreferrer noopener" aria-label=" (opens in a new tab)" href="https://www.nltk.org/" target="_blank">(Natural Language Toolkit)  </a>library has a cool function, most_common(n) that outputs the top n most frequent words in a given corpus.</p>
+
+
+
+<p>I will print out the top 100 in this case:</p>
+
+
+<pre class="brush: python; title: ; notranslate">
+# 100 most frequent words sorted by count
+most_freq_100 = fdist.most_common(100) # 100 most frequent words sorted by count
+for word, frequency in most_freq_100: # iterate and print
+    print word, frequency
+</pre>
+<p>the 159660<br />
+of 113472<br />
+this 106279<br />
+in 80984<br />
+to 50357<br />
+for 35403<br />
+is 34621<br />
+was 29775<br />
+on 23269<br />
+it 20561<br />
+from 17957<br />
+with 17247<br />
+that 15959<br />
+by 15778<br />
+his 15589<br />
+as 15555<br />
+these 13977<br />
+he 12793<br />
+you 12678<br />
+one 11842<br />
+an 11547<br />
+at 11365<br />
+name 11153<br />
+or 10274<br />
+first 9942<br />
+are 8576<br />
+its 8213<br />
+who 7633<br />
+city 7338<br />
+here 7020<br />
+be 6710<br />
+has 6111<br />
+and 6022<br />
+country 5954<br />
+her 5953<br />
+man 5522<br />
+named 5426<br />
+called 5368<br />
+state 5289<br />
+have 5219<br />
+about 5128<br />
+can 5051<br />
+but 4913<br />
+when 4894<br />
+seen 4860<br />
+film 4756<br />
+new 4745<br />
+not 4736<br />
+like 4731<br />
+clue 4677<br />
+type 4556<br />
+were 4370<br />
+up 4331<br />
+she 4216<br />
+made 4044<br />
+your 3995<br />
+crew 3982<br />
+which 3978<br />
+title 3931<br />
+used 3881<br />
+had 3874<br />
+known 3670<br />
+world 3605<br />
+after 3591<br />
+into 3570<br />
+out 3515<br />
+do 3474<br />
+also 3431<br />
+no 3426<br />
+word 3286<br />
+only 3274<br />
+all 3253<br />
+him 3199<br />
+became 3163<br />
+said 3152<br />
+president 3132<br />
+may 3125<br />
+years 3058<br />
+novel 2987<br />
+played 2986<br />
+wrote 2955<br />
+over 2937<br />
+my 2913<br />
+they 2875<br />
+capital 2862<br />
+king 2715<br />
+their 2714<br />
+term 2656<br />
+than 2612<br />
+war 2594<br />
+part 2590<br />
+book 2541<br />
+last 2517<br />
+island 2510<br />
+show 2489<br />
+most 2480<br />
+won 2478<br />
+been 2402<br />
+famous 2369<br />
+french 2362</p>
+
+
+
+<p>We see that the most frequent word is &#8216;the&#8217; followed by &#8216;of&#8217;, and so on. The frequencies start to decrease but a slower rate. </p>
+
+
+
+<p>If we were to plot this frequency distribution vs relative frequency distribution, we see that there is a inverse relationship going on:</p>
+
+
+<pre class="brush: python; title: ; notranslate">
+# compute the relative frequency and round it to 4 decimal places
+frequency = [x[1] for x in most_freq_100] # frequencies of words
+rel_frequency = [round(float(x)/n_words, 4) for x in frequency]
+plt.plot(rel_frequency) # log-scale
+plt.xlabel(&quot;Rank of words in corpus&quot;, color=&quot;w&quot;)
+plt.ylabel(&quot;Relative Frequency of Words&quot;, color=&quot;w&quot;)
+plt.title(&quot;Zipf Plot of 100 Most Common Words&quot;, color=&quot;w&quot;)
+plt.show()lot of 100 Most Common Words&quot;)
+plt.show()
+</pre>
+
+
+
+<figure class="wp-block-image"><img loading="lazy" width="402" height="278" src="http://52.201.113.190/wp-content/uploads/2019/01/plot-3.png" alt="" class="wp-image-72" srcset="https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2019/01/plot-3.png 402w, https://thatdatascienceguy.github.io/data-science-blog/wp-content/uploads/2019/01/plot-3-300x207.png 300w" sizes="(max-width: 402px) 100vw, 402px" /><figcaption>Plot of relative frequencies of the top 100 words in the corpus. As the rank of a word decreases, the relative frequency decreases showing a inverse proportional relationship. This behavior is known as Zipf&#8217;s Law.</figcaption></figure>
+
+
+
+<p><a href="https://simple.wikipedia.org/wiki/Zipf%27s_law">Zipf&#8217;s Law</a> states that the frequency of  a word is inversely proportional to its rank in the frequency list. In mathematical notation:</p>
+
+
+<p><br />
+$$<br />
+\begin{aligned}<br />
+r = 1/n<br />
+\end{aligned}<br />
+$$</p>
+
+
+
+<p>Where r is the rank of the word (1 the most common word, 2  the second most common and so on) and n is the relative frequency.</p>
+
+
+
+<p>So what I have demonstrated you might ask? By using computer programming and some Natural Language Processing, we can gain insight on text corpora and explore what the corpus reveals. In this case of using Jeopardy! questions, we&#8217;ve saw that the most common word in these questions was &#8216;the&#8217; followed by &#8216;of&#8217; and then &#8216;this&#8217; and so on. Similar or advanced methods are how one would analyze text of say twitter feeds and customer reviews of a product.</p>
+
+
+
+<p>I hope you enjoyed reading the post and learned something new <img src="https://s.w.org/images/core/emoji/13.1.0/72x72/1f642.png" alt="🙂" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Let me know your thoughts in the comments section below. Did you enjoy reading this post? Could this type of problem be solved in a different manner? What other things would you have liked to see in this post?</p>
+
+
+
+<p>Your feedback is greatly appreciated.</p>
+
+
+
+<p>Jonathan A.K.A That Data Science Guy</p>
+
+
+
+<p>Link to github of material if you&#8217;re interested: <a href="https://github.com/jonathan1987/DATA620/blob/master/Homework8/high_frequency_words.ipynb">https://github.com/jonathan1987/DATA620/blob/master/Homework8/high_frequency_words.ipynb</a></p>
+		]]></content:encoded>
+					
+					<wfw:commentRss>https://thatdatascienceguy.github.io/data-science-blog/2019/01/25/jeopardy-analysis/feed/</wfw:commentRss>
+			<slash:comments>0</slash:comments>
+		
+		
+			</item>
+	</channel>
+</rss>
